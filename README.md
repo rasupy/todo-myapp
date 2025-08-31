@@ -1,4 +1,4 @@
-# Todo Mini App - ポートフォリオ用タスク管理
+# Todo Mini App - タスク管理アプリ
 
 ![FlaskAPI](https://img.shields.io/badge/FlaskAPI-3.1.1-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue)
@@ -110,7 +110,6 @@ todo-app/
 
    ```bash
    cp backend/.env.example backend/.env
-   # 必要に応じて編集
    ```
 
 3. **Docker で起動**
@@ -158,5 +157,4 @@ todo-app/
 
 ---
 
-この README は、分かりやすさ・可読性・ポートフォリオ用途を重視して再構成しています。  
-ご要望に応じてさらにカスタマイズ可能です。
+この README は、分かりやすさ・可読性・ポートフォリオ用途を重視して再構成しています。

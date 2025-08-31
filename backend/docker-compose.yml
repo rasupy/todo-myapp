@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  backend:
+    build: .
+    container_name: todo-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./app:/app/app
+      - ./requirements.txt:/app/requirements.txt
+    environment:
+      - FLASK_ENV=development
+    command: python app/main.py
