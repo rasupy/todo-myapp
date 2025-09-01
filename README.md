@@ -75,24 +75,24 @@ CREATE INDEX idx_tasks_sort_order ON tasks(sort_order);
 ## フォルダ構成
 
 ```
-todo-app/
+todo-myapp/
 ├── backend/               # FlaskAPI（バックエンド）
 │   ├── app/               # アプリ本体
 │   │   ├── main.py        # エントリーポイント
 │   │   ├── models.py      # DBモデル
 │   │   ├── api.py         # APIルーティング
-│   │   └── config.py      # 設定
+│   │   ├── config.py      # 設定
+│   │   ├── database.py    # DB接続
 │   ├── requirements.txt   # Python依存
 │   ├── Dockerfile         # バックエンド用Docker
-├── frontend/               # TypeScript（フロントエンド）
+│   ├── docker-compose.yml # DB用Compose（backend単体）
+├── frontend/              # TypeScript（フロントエンド）
 │   ├── src/               # ソースコード
-│   │   ├── index.ts       # エントリーポイント
-│   │   └── components/    # UI部品
 │   ├── public/            # 静的ファイル
 │   ├── package.json       # npm依存
 │   ├── Dockerfile         # フロントエンド用Docker
-├── docker-compose.yml      # 全体構成
-└── README.md               # ドキュメント
+├── docker-compose.yml     # 全体構成
+└── README.md              # ドキュメント
 ```
 
 ---
@@ -102,8 +102,8 @@ todo-app/
 1. **リポジトリをクローン**
 
    ```bash
-   git clone https://github.com/your-username/todo-app.git
-   cd todo-app
+   git clone https://github.com/your-username/todo-myapp.git
+   cd todo-myapp
    ```
 
 2. **環境変数の設定**
@@ -139,7 +139,7 @@ todo-app/
 ## 今後の予定
 
 - [ ] 認証機能（ユーザー登録・ログイン）
-- [ ] TypeScript 化の推進
+- [ ] TypeScript リファクタリング
 - [ ] PWA 対応（オフライン・通知）
 - [ ] テスト実装（単体・統合）
 - [ ] CI/CD（GitHub Actions）
@@ -148,7 +148,7 @@ todo-app/
 
 ## 開発者情報
 
-- **開発期間**: 2025 年 7 月〜
+- **開発期間**: 2025 年 7 月〜（開発中）
 - **開発者**: rasupy（個人開発）
 
 ---
@@ -158,3 +158,22 @@ todo-app/
 ---
 
 この README は、分かりやすさ・可読性・ポートフォリオ用途を重視して再構成しています。
+
+---
+
+## コミットメッセージ規約
+
+```
+<type>(<scope>): <概要>
+```
+
+- **type**: 変更の種類（例: feat, fix, docs, style, refactor, test, chore）
+- **scope**: 変更対象（例: README, API, frontend, backend など）
+- **概要**: 変更内容の要約
+
+### サンプル
+
+- docs(README): README を編集
+- feat(api): タスク追加 API を実装
+- fix(frontend): タスク一覧の表示バグ修正
+- chore(deps): 依存パッケージを更新

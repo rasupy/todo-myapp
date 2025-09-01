@@ -10,4 +10,22 @@ services:
       - ./requirements.txt:/app/requirements.txt
     environment:
       - FLASK_ENV=development
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/todo_db
+    depends_on:
+      - db
     command: python app/main.py
+
+  db:
+    image: postgres:16
+    container_name: todo-db
+    environment:
+      POSTGRES_DB: todo_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
