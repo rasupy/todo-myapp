@@ -36,7 +36,7 @@ class User(Base):
 class Category(Base):
     __tablename__ = "categories"
     category_id = Column(BigInteger, primary_key=True, autoincrement=True)
-    name = Column(String(100), nullable=False)
+    title = Column(String(100), nullable=False)
     sort_order = Column(Integer, default=0)
     user_id = Column(BigInteger, ForeignKey("users.user_id", ondelete="CASCADE"))
     user = relationship("User", back_populates="categories")
@@ -44,7 +44,7 @@ class Category(Base):
         "Task", back_populates="category", cascade="all, delete-orphan"
     )
     __table_args__ = (
-        UniqueConstraint("user_id", "name"),
+        UniqueConstraint("user_id", "title"),
         Index("idx_categories_sort_order", "sort_order"),
     )
 
