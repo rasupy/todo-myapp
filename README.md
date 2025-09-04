@@ -48,10 +48,10 @@ CREATE TABLE users (
 -- categories: カテゴリー管理
 CREATE TABLE categories (
    category_id BIGSERIAL PRIMARY KEY, -- カテゴリーID（自動採番）
-   name VARCHAR(100) NOT NULL,
+   title VARCHAR(100) NOT NULL,
    sort_order INTEGER DEFAULT 0,
    user_id BIGINT REFERENCES users(user_id) ON DELETE CASCADE,
-   UNIQUE (user_id, name)
+   UNIQUE (user_id, title)
 );
 
 -- tasks: タスク管理
@@ -59,7 +59,7 @@ CREATE TABLE tasks (
    task_id BIGSERIAL PRIMARY KEY, -- タスクID（自動採番）
    title VARCHAR(32) NOT NULL,
    content TEXT,
-   status VARCHAR(32) DEFAULT 'todo',　-- todo|progress|archive
+   status VARCHAR(32) DEFAULT 'todo', -- todo|progress|archive
    sort_order INTEGER DEFAULT 0,
    user_id BIGINT REFERENCES users(user_id) ON DELETE CASCADE,
    category_id BIGINT REFERENCES categories(category_id) ON DELETE CASCADE
@@ -69,8 +69,6 @@ CREATE TABLE tasks (
 CREATE INDEX idx_categories_sort_order ON categories(sort_order);
 CREATE INDEX idx_tasks_sort_order ON tasks(sort_order);
 ```
-
----
 
 ## フォルダ構成
 
