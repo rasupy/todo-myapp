@@ -14,5 +14,5 @@ COPY app/ ./app/
 # ポート開放
 EXPOSE 5000
 
-# サーバ起動コマンド（DBテーブル作成→Flask起動）
-CMD ["sh", "-c", "python app/database.py && python app/main.py"]
+# サーバ起動コマンド（Flaskアプリ起動）
+CMD ["python", "app/main.py"]

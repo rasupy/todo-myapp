@@ -4,3 +4,4 @@ Flask-SQLAlchemy
 sqlalchemy
 python-dotenv
 psycopg2-binary
+werkzeug
