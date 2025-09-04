@@ -2,8 +2,12 @@ from flask import Flask
 from werkzeug.security import generate_password_hash, check_password_hash
 from database import SessionLocal, create_tables
 from models import User
+from config import Config
+from api import api_bp
 
 app = Flask(__name__)
+app.config.from_object(Config)
+app.register_blueprint(api_bp)
 
 """
 仮ユーザーを作成
