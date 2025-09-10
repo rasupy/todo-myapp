@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify
 from database import SessionLocal
 from models import Category
-from sqlalchemy.exc import IntegrityError
 
 api_bp = Blueprint("api", __name__)
 
@@ -9,17 +8,9 @@ api_bp = Blueprint("api", __name__)
 # カテゴリー追加機能
 @api_bp.route("/category", methods=["POST"])
 def add_category():
-    data = request.get_json() or {}
+    data = request.get_json()
     title = data.get("title")
     user_id = data.get("user_id")
-
-    # 入力検証
-    if title is None or user_id is None:
-        return jsonify({"error": "title と user_id が必要です"}), 400
-    title = str(title).strip()
-    if title == "":
-        return jsonify({"error": "title が空です"}), 400
-
     session = SessionLocal()
     try:
         exists = session.query(Category).filter_by(user_id=user_id, title=title).first()
@@ -27,15 +18,7 @@ def add_category():
             return jsonify({"error": "同じタイトルのカテゴリーが既に存在します"}), 409
         category = Category(title=title, user_id=user_id)
         session.add(category)
-        try:
-            session.commit()
-        except IntegrityError:
-            session.rollback()
-            return jsonify({"error": "同じタイトルのカテゴリーが既に存在します"}), 409
-        except Exception:
-            session.rollback()
-            return jsonify({"error": "サーバーエラー"}), 500
-
+        session.commit()
         return (
             jsonify(
                 {
@@ -99,14 +82,7 @@ def rename_category(category_id):
 
         # 更新実行
         category.title = new_title
-        try:
-            session.commit()
-        except IntegrityError:
-            session.rollback()
-            return jsonify({"error": "同じタイトルのカテゴリーが既に存在します"}), 409
-        except Exception:
-            session.rollback()
-            return jsonify({"error": "サーバーエラー"}), 500
+        session.commit()
 
         return (
             jsonify(
