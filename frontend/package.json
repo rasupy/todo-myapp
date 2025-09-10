@@ -1,0 +1,12 @@
+{
+  "name": "todo-myapp-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc --project tsconfig.json --outDir dist",
+    "start": "node server.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
