@@ -2,7 +2,41 @@ from flask import Blueprint, request, jsonify
 from database import SessionLocal
 from models import Category
 
+from flask import current_app
+
 api_bp = Blueprint("api", __name__)
+
+
+# カテゴリー一覧取得
+@api_bp.route("/categories", methods=["GET"])
+def list_categories():
+    """クエリパラメータ: user_id
+    レスポンス: [{ category_id, category_title, sort_order, user_id }, ...]
+    """
+    user_id = request.args.get("user_id", type=int)
+    if user_id is None:
+        return jsonify({"error": "user_id が必要です"}), 400
+
+    session = SessionLocal()
+    try:
+        cats = (
+            session.query(Category)
+            .filter_by(user_id=user_id)
+            .order_by(Category.sort_order)
+            .all()
+        )
+        result = [
+            {
+                "category_id": c.category_id,
+                "category_title": c.title,
+                "sort_order": c.sort_order,
+                "user_id": c.user_id,
+            }
+            for c in cats
+        ]
+        return jsonify(result), 200
+    finally:
+        session.close()
 
 
 # カテゴリー追加機能
