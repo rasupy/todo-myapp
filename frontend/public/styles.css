@@ -11,6 +11,11 @@ header h1 {
 .cat-item {
   padding: 6px 0;
   border-bottom: 1px solid #eee;
+  /* prevent text selection while interacting and hint touch behavior */
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action: none;
 }
 .cat-item .title {
   margin-left: 8px;
@@ -23,4 +28,29 @@ pre {
   padding: 12px;
   border-radius: 6px;
   white-space: pre-wrap;
+}
+
+/* Drag UX improvements */
+.cat-item.dragging {
+  opacity: 0.95;
+  transform: scale(1.02);
+  transition: transform 120ms ease-out;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  background: #ffffff;
+  border-radius: 6px;
+  /* allow pointer events to continue while dragging (we capture pointers in JS) */
+  cursor: grabbing;
+}
+
+.placeholder {
+  background: rgba(0, 0, 0, 0.03);
+  border: 2px dashed #e0e0e0;
+  border-radius: 6px;
+  margin: 4px 0;
+  min-height: 36px;
+  transition: background-color 120ms ease;
+}
+
+.cat-item {
+  cursor: grab;
 }

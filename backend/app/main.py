@@ -8,7 +8,9 @@ import time
 
 app = Flask(__name__)
 app.config.from_object(Config)
-app.register_blueprint(api_bp)
+# APIエンドポイントをフロントエンドの呼び出しに合わせて
+# /api/<endpoint>をexposeするためにURLプレフィックスを追加
+app.register_blueprint(api_bp, url_prefix="/api")
 
 """
 仮ユーザー情報
