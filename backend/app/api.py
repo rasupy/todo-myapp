@@ -2,8 +2,6 @@ from flask import Blueprint, request, jsonify
 from database import SessionLocal
 from models import Category
 
-from flask import current_app
-
 api_bp = Blueprint("api", __name__)
 
 
@@ -22,18 +20,10 @@ def list_categories():
         cats = (
             session.query(Category)
             .filter_by(user_id=user_id)
-            .order_by(Category.sort_order)
+            .order_by(Category.sort_order.desc())
             .all()
         )
-        result = [
-            {
-                "category_id": c.category_id,
-                "category_title": c.title,
-                "sort_order": c.sort_order,
-                "user_id": c.user_id,
-            }
-            for c in cats
-        ]
+        result = [_category_to_dict(c) for c in cats]
         return jsonify(result), 200
     finally:
         session.close()
@@ -42,9 +32,11 @@ def list_categories():
 # カテゴリー追加機能
 @api_bp.route("/category", methods=["POST"])
 def add_category():
-    data = request.get_json()
+    data = request.get_json() or {}
     title = data.get("title")
     user_id = data.get("user_id")
+    if title is None or user_id is None:
+        return jsonify({"error": "title と user_id が必要です"}), 400
     session = SessionLocal()
     try:
         exists = session.query(Category).filter_by(user_id=user_id, title=title).first()
@@ -53,16 +45,7 @@ def add_category():
         category = Category(title=title, user_id=user_id)
         session.add(category)
         session.commit()
-        return (
-            jsonify(
-                {
-                    "category_id": category.category_id,
-                    "category_title": category.title,
-                    "user_id": category.user_id,
-                }
-            ),
-            201,
-        )
+        return jsonify(_category_to_dict(category)), 201
     finally:
         session.close()
 
@@ -96,16 +79,7 @@ def rename_category(category_id):
 
         # 変更前と同じタイトルならそのまま返す
         if category.title == new_title:
-            return (
-                jsonify(
-                    {
-                        "category_id": category.category_id,
-                        "category_title": category.title,
-                        "user_id": category.user_id,
-                    }
-                ),
-                200,
-            )
+            return jsonify(_category_to_dict(category)), 200
 
         # 同一ユーザー内で同じタイトルが既に存在しないかチェック
         exists = (
@@ -118,15 +92,19 @@ def rename_category(category_id):
         category.title = new_title
         session.commit()
 
-        return (
-            jsonify(
-                {
-                    "category_id": category.category_id,
-                    "category_title": category.title,
-                    "user_id": category.user_id,
-                }
-            ),
-            200,
-        )
+        return jsonify(_category_to_dict(category)), 200
     finally:
         session.close()
+
+
+def _category_to_dict(category: Category) -> dict:
+    """共通のレスポンス変換: Category -> dict
+
+    keys: category_id, category_title, sort_order, user_id
+    """
+    return {
+        "category_id": category.category_id,
+        "category_title": category.title,
+        "sort_order": category.sort_order,
+        "user_id": category.user_id,
+    }
