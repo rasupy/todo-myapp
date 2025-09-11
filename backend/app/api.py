@@ -134,19 +134,16 @@ def reorder_categories():
         mapping = {int(cid): idx for idx, cid in enumerate(ordered_ids)}
 
         # 対象が指定ユーザーに属していることを保証する WHERE を付与
+        # SQLAlchemy case() expects when/then pairs as positional args, not a single list
+        when_pairs = [
+            (Category.category_id == cid, order) for cid, order in mapping.items()
+        ]
+
         stmt = (
             update(Category)
             .where(Category.category_id.in_(list(mapping.keys())))
             .where(Category.user_id == user_id)
-            .values(
-                sort_order=case(
-                    [
-                        (Category.category_id == cid, order)
-                        for cid, order in mapping.items()
-                    ],
-                    else_=Category.sort_order,
-                )
-            )
+            .values(sort_order=case(*when_pairs, else_=Category.sort_order))
         )
 
         res = session.execute(stmt)
@@ -168,3 +165,29 @@ def _category_to_dict(category: Category) -> dict:
         "sort_order": category.sort_order,
         "user_id": category.user_id,
     }
+
+
+# カテゴリーの削除
+@api_bp.route("/category/<int:category_id>", methods=["DELETE"])
+def delete_category(category_id: int):
+    """クエリパラメータ: user_id
+    成功時: { deleted: true }
+    """
+    user_id = request.args.get("user_id", type=int)
+    if user_id is None:
+        return jsonify({"error": "user_id が必要です"}), 400
+
+    session = SessionLocal()
+    try:
+        cat = (
+            session.query(Category)
+            .filter_by(category_id=category_id, user_id=user_id)
+            .first()
+        )
+        if not cat:
+            return jsonify({"error": "指定されたカテゴリーが見つかりません"}), 404
+        session.delete(cat)
+        session.commit()
+        return jsonify({"deleted": True}), 200
+    finally:
+        session.close()
