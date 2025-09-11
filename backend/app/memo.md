@@ -15,3 +15,9 @@
 
 # カテゴリーの並べ替え（ソート）機能
 ```
+
+### テーブルの確認
+
+```bash
+docker exec -i todo-db psql -U postgres -d todo_db -c "\d+ categories" ; docker exec -i todo-db psql -U postgres -d todo_db -c "SELECT * FROM categories LIMIT 50;"
+```
