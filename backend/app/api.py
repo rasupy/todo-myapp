@@ -154,24 +154,12 @@ def reorder_categories():
         session.close()
 
 
-def _category_to_dict(category: Category) -> dict:
-    """共通のレスポンス変換: Category -> dict
-
-    keys: category_id, category_title, sort_order, user_id
-    """
-    return {
-        "category_id": category.category_id,
-        "category_title": category.title,
-        "sort_order": category.sort_order,
-        "user_id": category.user_id,
-    }
-
-
 # カテゴリーの削除
 @api_bp.route("/category/<int:category_id>", methods=["DELETE"])
 def delete_category(category_id: int):
     """クエリパラメータ: user_id
-    成功時: { deleted: true }
+    成功時: { deleted: true, remaining: <int> }
+    削除後、同一ユーザーの sort_order を 0..n-1 に再正規化
     """
     user_id = request.args.get("user_id", type=int)
     if user_id is None:
@@ -187,7 +175,32 @@ def delete_category(category_id: int):
         if not cat:
             return jsonify({"error": "指定されたカテゴリーが見つかりません"}), 404
         session.delete(cat)
+        session.flush()  # ここで削除を反映させてから再採番
+
+        # 再採番: 現在の sort_order 昇順に取得し 0..len-1 を付与
+        remaining_cats = (
+            session.query(Category)
+            .filter_by(user_id=user_id)
+            .order_by(Category.sort_order.asc())
+            .all()
+        )
+        for idx, c in enumerate(remaining_cats):
+            if c.sort_order != idx:
+                c.sort_order = idx
         session.commit()
-        return jsonify({"deleted": True}), 200
+        return jsonify({"deleted": True, "remaining": len(remaining_cats)}), 200
     finally:
         session.close()
+
+
+def _category_to_dict(category: Category) -> dict:
+    """共通のレスポンス変換: Category -> dict
+
+    keys: category_id, category_title, sort_order, user_id
+    """
+    return {
+        "category_id": category.category_id,
+        "category_title": category.title,
+        "sort_order": category.sort_order,
+        "user_id": category.user_id,
+    }
