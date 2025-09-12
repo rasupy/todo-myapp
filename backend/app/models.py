@@ -46,6 +46,9 @@ class Category(Base):
     __table_args__ = (
         UniqueConstraint("user_id", "title"),
         Index("idx_categories_sort_order", "sort_order"),
+        Index(
+            "idx_categories_user_sort", "user_id", "sort_order"
+        ),  # 追加: ユーザー内ソート高速化
     )
 
 
