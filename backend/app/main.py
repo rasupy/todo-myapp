@@ -56,8 +56,8 @@ def get_or_create_user(retries=10, delay=3):
 
 
 @app.route("/")
-def index():
-    return {"status": "ok", "message": "Backend API running"}
+def main():
+    return "Hello World"
 
 
 if __name__ == "__main__":
