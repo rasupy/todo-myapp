@@ -105,7 +105,10 @@ export function makeSortable(
   const onPointerCancel = (pc: PointerEvent) => cleanup(pc);
 
   ul.addEventListener("pointerdown", (e) => {
-    const li = (e.target as HTMLElement).closest("li") as HTMLLIElement | null;
+    const target = e.target as HTMLElement;
+    // ボタン上ではドラッグ開始させない (クリックイベント優先)
+    if (target.closest("button")) return;
+    const li = target.closest("li") as HTMLLIElement | null;
     if (!li) return;
     if ((e as PointerEvent).button !== 0) return; // left only
     const pid = (e as PointerEvent).pointerId;
