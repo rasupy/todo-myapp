@@ -1,13 +1,9 @@
 // アプリケーションのエントリーポイント
-import {
-  fetchCategories,
-  updateCategory,
-  deleteCategory,
-  type Category,
-} from "./api.js";
+import { fetchCategories, updateCategory, type Category } from "./api.js";
 import { renderCategoryList } from "./categoryView.js";
 import { createAddForm } from "./categoryForm.js";
 import { makeSortable } from "./categorySortable.js";
+import { removeCategory } from "./categoryDel.js";
 
 async function init() {
   const addContainer = (document.querySelector("#addContainer") ||
@@ -32,7 +28,6 @@ async function init() {
   async function onEdit(id: number, title: string) {
     try {
       await updateCategory(id, title);
-      // 更新後に再取得して UI を正確に反映
       categories = await fetchCategories();
       render();
     } catch (e) {
@@ -42,7 +37,6 @@ async function init() {
   }
 
   createAddForm(addContainer as HTMLElement, async (created: Category) => {
-    // 追加後は最新をサーバーから取得して反映
     try {
       categories = await fetchCategories();
       render();
@@ -56,9 +50,18 @@ async function init() {
 
   async function onDelete(id: number) {
     try {
-      await deleteCategory(id);
-      categories = await fetchCategories();
-      render();
+      const ok = await removeCategory(id, {
+        before: () => {
+          listContainer.dataset.loading = "1";
+        },
+        after: () => {
+          delete listContainer.dataset.loading;
+        },
+      });
+      if (ok) {
+        categories = await fetchCategories();
+        render();
+      }
     } catch (e) {
       console.error(e);
       alert("削除に失敗しました");
