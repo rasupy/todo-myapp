@@ -1,6 +1,19 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
+  padding: 0;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f5f7fa;
+}
+/* アプリ全体コンテナが縦方向に伸びる */
+#app {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
   padding: 20px;
+  box-sizing: border-box;
 }
 header h1 {
   margin: 0 0 12px 0;
@@ -11,7 +24,6 @@ header h1 {
 .cat-item {
   padding: 6px 0;
   border-bottom: 1px solid #eee;
-  /* prevent text selection while interacting and hint touch behavior */
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
@@ -30,7 +42,6 @@ pre {
   white-space: pre-wrap;
 }
 
-/* Drag UX improvements */
 .cat-item.dragging {
   opacity: 0.95;
   transform: scale(1.02);
@@ -38,12 +49,11 @@ pre {
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
   background: #ffffff;
   border-radius: 6px;
-  /* allow pointer events to continue while dragging (we capture pointers in JS) */
   cursor: grabbing;
 }
 
 .placeholder {
-  background: rgba(0, 0, 0, 0.03);
+  background: #fff;
   border: 2px dashed #e0e0e0;
   border-radius: 6px;
   margin: 4px 0;
@@ -53,4 +63,174 @@ pre {
 
 .cat-item {
   cursor: grab;
+}
+
+/* =============================
+   3 Column Board Layout Styles
+   ============================= */
+header {
+  max-width: 1280px;
+  margin: 0 auto 12px auto;
+}
+
+.board {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+  max-width: 1280px;
+  margin: 0 auto;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  flex: 1 1 auto; /* 高さを残り全体に */
+  min-height: 0; /* flex子のoverflow対策 */
+}
+
+/* 各カラムを同じ幅で伸縮 */
+.board > .col {
+  flex: 1 1 0;
+  min-width: 280px; /* 最低幅確保 */
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 12px 12px 16px 12px;
+  min-height: 0; /* 親flexの高さ制御下で内部スクロールを許可 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+  position: relative;
+  transition: box-shadow 0.18s ease;
+}
+
+.col:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.col-title {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.panel {
+  background: #fafbfc;
+  border: 1px solid #e6e9ec;
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 12px;
+}
+
+.add-panel {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.list-panel {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0;
+  /* 高さは親(col)がボードの高さ内で全体を配分する */
+}
+
+.list-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list-panel li + li {
+  margin-top: 2px;
+}
+
+.placeholder-panel {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-size: 13px;
+  text-align: center;
+  min-height: 160px;
+}
+
+.placeholder-msg {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.cat-item button {
+  margin-left: 4px;
+  font-size: 12px;
+  padding: 2px 8px;
+}
+
+#addContainer input {
+  flex: 1 1 160px;
+}
+
+#categories[data-loading="1"] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.list-panel::-webkit-scrollbar {
+  width: 8px;
+}
+.list-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+.list-panel::-webkit-scrollbar-thumb {
+  background: #d0d5da;
+  border-radius: 4px;
+}
+.list-panel::-webkit-scrollbar-thumb:hover {
+  background: #b8bfc6;
+}
+
+/* Dark mode (prefers-color-scheme) */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #1e1f22;
+    color: #e4e6eb;
+  }
+  .col {
+    background: #2a2c30;
+    border-color: #3a3d41;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  .panel {
+    background: #212326;
+    border-color: #323438;
+  }
+  .list-panel li {
+    border-bottom-color: #3a3d41;
+  }
+  .placeholder {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: #50555c;
+  }
+  .placeholder-panel {
+    color: #aaa;
+  }
+  pre {
+    background: #2a2c30;
+  }
+  .cat-item.dragging {
+    background: #313539;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
+  }
+  .list-panel::-webkit-scrollbar-thumb {
+    background: #4a4f55;
+  }
+  .list-panel::-webkit-scrollbar-thumb:hover {
+    background: #5c6268;
+  }
 }
