@@ -3,23 +3,43 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Todo Frontend</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <title>Todo-App</title>
+    <link rel="stylesheet" href="/styles.css?v=20250913b" />
   </head>
   <body>
     <div id="app">
       <header>
-        <h1>Todo Categories</h1>
+        <h1>Todo Board</h1>
       </header>
-      <section>
-        <div id="addContainer">
-          <!-- createAddForm will reuse or create input/button here -->
-          <input id="newTitle" placeholder="新しいカテゴリー名" />
-          <button id="addBtn">追加</button>
-        </div>
-        <div id="categories">読み込み待ち...</div>
-        <pre id="result"></pre>
-      </section>
+      <div class="board">
+        <!-- Categories -->
+        <section class="col col-category">
+          <h2 class="col-title">Category</h2>
+          <div id="addContainer" class="panel add-panel">
+            <!-- カテゴリーの追加 -->
+            <input id="newTitle" placeholder="新しいカテゴリー名" />
+            <button id="addBtn">追加</button>
+          </div>
+          <div id="categories" class="panel list-panel">読み込み待ち...</div>
+        </section>
+        <!-- Tasks -->
+        <section class="col col-task">
+          <h2 class="col-title">Task</h2>
+          <div id="tasks" class="panel placeholder-panel">
+            <p class="placeholder-msg">
+              カテゴリーをクリックするとタスク一覧（未実装）がここに表示されます。
+            </p>
+          </div>
+        </section>
+        <!-- Archive (placeholder) -->
+        <section class="col col-archive">
+          <h2 class="col-title">Archive</h2>
+          <div id="archive" class="panel placeholder-panel">
+            <p class="placeholder-msg">アーカイブ（未実装）</p>
+          </div>
+        </section>
+      </div>
+      <pre id="result"></pre>
     </div>
     <script type="module" src="/main.js"></script>
   </body>
