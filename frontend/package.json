@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "tsc --project tsconfig.json --outDir dist",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc --project tsconfig.json --outDir dist",
     "dev": "tsc --watch --project tsconfig.json --outDir dist"
   },
   "devDependencies": {

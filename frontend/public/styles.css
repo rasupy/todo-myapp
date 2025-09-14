@@ -7,19 +7,74 @@ body {
   flex-direction: column;
   background: #f5f7fa;
 }
-/* アプリ全体コンテナが縦方向に伸びる */
 #app {
-  flex: 1 1 auto;
+  /* 画面全体を縦に埋める */
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  box-sizing: border-box;
 }
-header h1 {
-  margin: 0 0 12px 0;
+/* header を固定高さコンテンツとして上部に */
+#app > header {
+  flex: 0 0 auto;
 }
-#categories {
-  margin-top: 12px;
+
+/* board が残り高さを占有し内部スクロール可能に */
+#app > .board {
+  flex: 1 1 auto;
+  min-height: 0; /* flex 子 overflow 対策 */
+}
+
+/* 各列内 list-panel が縦方向残りを使うのは既存定義でOK */
+/* アプリ全体コンテナが縦方向に伸びる */
+#categoryHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.header-actions {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: auto; /* これで右端寄せ */
+}
+/* Unified Add button (Material Symbols icon) */
+.btn-add {
+  background: none;
+  border: none;
+  padding: 0; /* 余白を極小化 */
+  cursor: pointer;
+  color: #333;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0; /* テキストノード排除 */
+}
+.btn-add .material-symbols-outlined {
+  font-size: 20px; /* タイトル(16px)とのバランス */
+  width: 20px;
+  height: 20px;
+  line-height: 1;
+}
+.btn-add:hover {
+  color: #2563eb;
+}
+.btn-add:active {
+  color: #1d4ed8;
+}
+.btn-add:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+@media (prefers-color-scheme: dark) {
+  .btn-add {
+    color: #e4e6eb;
+  }
+  .btn-add:hover {
+    color: #60a5fa;
+  }
+  .btn-add:active {
+    color: #3b82f6;
+  }
 }
 .cat-item {
   padding: 6px 0;
@@ -126,12 +181,7 @@ header {
   margin-bottom: 12px;
 }
 
-.add-panel {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 4px;
-}
+/* add-panel 削除済み */
 
 .list-panel {
   flex: 1 1 auto;
@@ -172,15 +222,164 @@ header {
   padding: 2px 8px;
 }
 
-#addContainer input {
-  flex: 1 1 160px;
+/* 行内アクション（アイコン小サイズ） */
+.row-actions {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 8px;
 }
+.icon-btn-sm {
+  background: transparent;
+  border: 0;
+  padding: 2px;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.icon-btn-sm .material-symbols-outlined {
+  font-size: 20px;
+}
+.icon-btn-sm:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+.icon-btn-sm:active {
+  background: rgba(0, 0, 0, 0.12);
+}
+@media (prefers-color-scheme: dark) {
+  .icon-btn-sm:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .icon-btn-sm:active {
+    background: rgba(255, 255, 255, 0.16);
+  }
+}
+
+/* インライン編集中は既存の編集/削除ボタンを非表示（再構築時に置き換わっている想定） */
+.cat-item.editing .row-action-edit,
+.cat-item.editing .row-action-del {
+  display: none;
+}
+
+.cat-edit-input {
+  width: 60%;
+  max-width: 300px;
+  padding: 4px 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* #addContainer は削除 */
 
 #categories[data-loading="1"] {
   opacity: 0.5;
   pointer-events: none;
 }
 
+.icon-btn {
+  background: #ffffff;
+  border: 1px solid #d5d9dd;
+  border-radius: 6px;
+  padding: 2px 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+.icon-btn:hover {
+  background: #f0f3f6;
+}
+.icon-btn:active {
+  background: #e2e7ec;
+}
+.icon-btn:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 1px;
+}
+.icon-btn .material-symbols-outlined {
+  font-size: 20px;
+}
+
+/* === Row action text buttons (Edit / Delete / Save / Cancel) === */
+.txt-btn {
+  background: transparent;
+  border: none;
+  padding: 2px 4px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #2563eb; /* blue-600 */
+  border-radius: 4px;
+  transition: background 0.15s, color 0.15s;
+}
+.txt-btn:hover {
+  background: rgba(37, 99, 235, 0.12);
+}
+.txt-btn:active {
+  background: rgba(37, 99, 235, 0.24);
+}
+.txt-btn:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+@media (prefers-color-scheme: dark) {
+  .txt-btn {
+    color: #60a5fa;
+  }
+  .txt-btn:hover {
+    background: rgba(96, 165, 250, 0.18);
+  }
+  .txt-btn:active {
+    background: rgba(96, 165, 250, 0.3);
+  }
+}
+
+/* 旧モード (edit/delete) スタイルは削除 */
+
+/* 編集行ハイライト */
+.cat-item.is-editing {
+  background: #eef6ff;
+}
+@media (prefers-color-scheme: dark) {
+  .cat-item.is-editing {
+    background: #233041;
+  }
+}
+
+/* dialog */
+dialog#catAddDialog {
+  border: 1px solid #d0d5da;
+  border-radius: 12px;
+  padding: 18px 20px 20px 20px;
+  width: 320px;
+  max-width: calc(100vw - 32px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18), 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+dialog#catAddDialog::backdrop {
+  background: rgba(0, 0, 0, 0.3);
+}
+dialog#catAddDialog form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+dialog#catAddDialog input {
+  width: 100%;
+  box-sizing: border-box;
+}
+dialog#catAddDialog .dlg-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+dialog#catAddDialog button {
+  cursor: pointer;
+}
 .list-panel::-webkit-scrollbar {
   width: 8px;
 }
@@ -210,6 +409,22 @@ header {
     background: #212326;
     border-color: #323438;
   }
+  .icon-btn {
+    background: #2f3236;
+    border-color: #41454a;
+    color: #e4e6eb;
+  }
+  .icon-btn:hover {
+    background: #3a3d41;
+  }
+  .icon-btn:active {
+    background: #454a50;
+  }
+  dialog#catAddDialog {
+    background: #2a2c30;
+    color: #e4e6eb;
+    border-color: #3a3d41;
+  }
   .list-panel li {
     border-bottom-color: #3a3d41;
   }
@@ -234,3 +449,5 @@ header {
     background: #5c6268;
   }
 }
+
+/* (Removed old overrides; base styles above are authoritative) */

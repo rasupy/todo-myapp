@@ -1,7 +1,15 @@
 // アプリケーションのエントリーポイント (debug instrumentation added)
-import { fetchCategories, updateCategory, type Category } from "./api.js";
+import {
+  fetchCategories,
+  updateCategory,
+  addCategory,
+  type Category,
+} from "./api.js";
+
+// Build stamp for cache verification (updated automatically by manual edits)
+// NOTE: Update this line to force browsers/proxies to fetch a new main.js when needed.
+console.log("[BUILD] VERSION=0.1.0 TIMESTAMP=2025-09-14T00:00:00Z");
 import { renderCategoryList } from "./categoryView.js";
-import { createAddForm } from "./categoryForm.js";
 import { makeSortable } from "./categorySortable.js";
 import { removeCategory } from "./categoryDel.js";
 
@@ -16,14 +24,26 @@ debugLog("script loaded: main.ts executing");
 
 async function init() {
   debugLog("init:start");
-  const addContainer = (document.querySelector("#addContainer") ||
-    document
-      .querySelector("#app")
-      ?.querySelector("section")) as HTMLElement | null;
   const listContainer = document.querySelector("#categories") as HTMLElement;
+  const btnAdd = document.querySelector(
+    "#btnCatAdd"
+  ) as HTMLButtonElement | null;
+  const dlg = document.querySelector(
+    "#catAddDialog"
+  ) as HTMLDialogElement | null;
+  const dlgForm = document.querySelector(
+    "#catAddForm"
+  ) as HTMLFormElement | null;
+  const dlgInput = document.querySelector(
+    "#catAddInput"
+  ) as HTMLInputElement | null;
+  const dlgCancel = document.querySelector(
+    "#catAddCancel"
+  ) as HTMLButtonElement | null;
   debugLog("dom refs", {
-    addContainer: !!addContainer,
     listContainer: !!listContainer,
+    btnAdd: !!btnAdd,
+    dlg: !!dlg,
   });
 
   let categories: Category[] = [];
@@ -60,16 +80,51 @@ async function init() {
     }
   }
 
-  createAddForm(addContainer as HTMLElement, async (created: Category) => {
-    debugLog("onAdd:callback", created.id);
-    try {
-      categories = await fetchCategories();
-      debugLog("onAdd:refetched", categories.length);
-      render();
-    } catch (e) {
-      console.error(e);
-      alert("カテゴリー取得に失敗しました");
-    }
+  // モード管理は不要になったため削除
+
+  // --- Add モーダル制御 ---
+  if (btnAdd && dlg && dlgForm && dlgInput && dlgCancel) {
+    btnAdd.addEventListener("click", () => {
+      dlgInput.value = "";
+      dlg.showModal();
+      setTimeout(() => dlgInput.focus(), 30);
+    });
+    dlgCancel.addEventListener("click", () => dlg.close());
+    dlgForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const title = dlgInput.value.trim();
+      if (!title) return;
+      const submitBtn = dlgForm.querySelector(
+        "#catAddSubmit"
+      ) as HTMLButtonElement | null;
+      if (submitBtn?.disabled) return; // 多重防止
+      if (submitBtn) submitBtn.disabled = true;
+      submitBtn?.setAttribute("data-loading", "1");
+      try {
+        const created = await addCategory(title);
+        debugLog("modalAdd:created", created.id);
+        categories = await fetchCategories();
+        render();
+        dlg.close();
+      } catch (err: any) {
+        console.error(err);
+        alert(`追加に失敗しました\n${err?.message ?? "Unknown error"}`);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.removeAttribute("data-loading");
+        }
+      }
+    });
+    // ESC キーは dialog が処理
+  }
+
+  // 削除は行のアイコンからのみ実行
+
+  // キーボードショートカット A/E/D
+  window.addEventListener("keydown", (ev) => {
+    if ((ev.target as HTMLElement)?.tagName === "INPUT") return;
+    if (ev.key.toLowerCase() === "a" && btnAdd) btnAdd.click();
   });
 
   render();

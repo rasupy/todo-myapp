@@ -5,6 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo-App</title>
     <link rel="stylesheet" href="/styles.css?v=20250913b" />
+    <!-- Material Symbols (Outlined) font loading optimization -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <style>
+      .material-symbols-outlined {
+        font-family: "Material Symbols Outlined", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 24px; /* fallback size */
+        display: inline-block;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: normal;
+        -webkit-font-smoothing: antialiased;
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      }
+    </style>
   </head>
   <body>
     <div id="app">
@@ -14,12 +35,21 @@
       <div class="board">
         <!-- Categories -->
         <section class="col col-category">
-          <h2 class="col-title">Category</h2>
-          <div id="addContainer" class="panel add-panel">
-            <!-- カテゴリーの追加 -->
-            <input id="newTitle" placeholder="新しいカテゴリー名" />
-            <button id="addBtn">追加</button>
-          </div>
+          <h2 class="col-title" id="categoryHeader">
+            <span>Category</span>
+            <span class="header-actions">
+              <button
+                id="btnCatAdd"
+                class="btn-add"
+                title="Add category"
+                aria-label="Add category"
+              >
+                <span class="material-symbols-outlined" aria-hidden="true"
+                  >add</span
+                >
+              </button>
+            </span>
+          </h2>
           <div id="categories" class="panel list-panel">読み込み待ち...</div>
         </section>
         <!-- Tasks -->
@@ -41,6 +71,28 @@
       </div>
       <pre id="result"></pre>
     </div>
-    <script type="module" src="/main.js"></script>
+    <!-- Category Add Dialog -->
+    <dialog id="catAddDialog">
+      <form method="dialog" id="catAddForm">
+        <h3>カテゴリーを追加</h3>
+        <label>
+          名称
+          <input
+            name="title"
+            id="catAddInput"
+            autofocus
+            required
+            placeholder="カテゴリー名"
+          />
+        </label>
+        <div class="dlg-actions">
+          <button value="cancel" type="button" id="catAddCancel">
+            キャンセル
+          </button>
+          <button value="submit" type="submit" id="catAddSubmit">追加</button>
+        </div>
+      </form>
+    </dialog>
+    <script type="module" src="/main.js?v=0.1.0"></script>
   </body>
 </html>
