@@ -1,0 +1,62 @@
+###############################################
+# .dockerignore (frontend)
+# 目的:
+#  - ビルドコンテキストを最小化し高速化
+#  - 不要/機密ファイルのイメージ混入防止
+#  - キャッシュの安定化
+###############################################
+
+# 依存ディレクトリ / パッケージマネージャ生成物
+node_modules
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS / エディタ / IDE アーティファクト
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+*.swp
+*.swo
+*.orig
+
+# VCS (履歴は不要) ※ .gitignore 自体は含めても問題は通常なし
+.git
+
+# ビルド成果物: 常にクリーンビルドしたいので除外
+dist
+coverage
+storybook-static
+
+# 一時/キャッシュ/レポート
+*.tsbuildinfo
+.eslintcache
+.cache
+tmp
+temp
+reports
+
+# 環境ファイル (本番ビルドへ直入れしない) → build-arg / secrets で渡す
+.env
+.env.*
+!.env.example
+
+# ログ類
+logs
+*.log
+
+# Docker / Compose の開発派生 (任意)
+Dockerfile.dev
+docker-compose.*.yml
+
+# 追加候補 (必要に応じてアンコメント)
+# .husky
+# .nyc_output
+# cypress
+# playwright-report
+# node_modules.tar.gz
+
+###############################################
+# End
+###############################################
