@@ -30,18 +30,26 @@ export function renderCategoryList(
     const span = document.createElement("span");
     span.className = "title";
     span.textContent = cat.title;
+    span.setAttribute("role", "textbox");
+    span.setAttribute("aria-readonly", "true");
+
+    const actionsWrap = document.createElement("span");
+    actionsWrap.className = "row-actions";
 
     const editBtn = document.createElement("button");
-    editBtn.className = "btn-edit";
-    editBtn.textContent = "編集";
+    editBtn.className = "row-action row-action-edit txt-btn";
+    editBtn.textContent = "Edit";
+    editBtn.title = "Edit";
 
     const delBtn = document.createElement("button");
-    delBtn.className = "btn-del";
-    delBtn.textContent = "削除";
+    delBtn.className = "row-action row-action-del txt-btn";
+    delBtn.textContent = "Delete";
+    delBtn.title = "Delete";
 
+    actionsWrap.appendChild(editBtn);
+    actionsWrap.appendChild(delBtn);
     li.appendChild(span);
-    li.appendChild(editBtn);
-    li.appendChild(delBtn);
+    li.appendChild(actionsWrap);
     ul.appendChild(li);
   });
 
@@ -54,19 +62,19 @@ export function renderCategoryList(
     if (!id) return;
 
     // 編集開始
-    if (target.classList.contains("btn-edit")) {
+    if (target.closest(".row-action-edit")) {
       D("click:edit", id);
       startEdit(li, id);
       return;
     }
     // 削除
-    if (target.classList.contains("btn-del")) {
+    if (target.closest(".row-action-del")) {
       D("click:delete", id);
       if (confirm("削除してよろしいですか？")) onDelete(id);
       return;
     }
     // 保存
-    if (target.classList.contains("btn-save")) {
+    if (target.closest(".row-action-save")) {
       D("click:save", id);
       const input = li.querySelector("input") as HTMLInputElement | null;
       if (!input) return;
@@ -76,7 +84,7 @@ export function renderCategoryList(
       return;
     }
     // 取消
-    if (target.classList.contains("btn-cancel")) {
+    if (target.closest(".row-action-cancel")) {
       D("click:cancel", id);
       // 元のリスト全体を再レンダ
       renderCategoryList(container, categories, onEdit, onDelete);
@@ -94,18 +102,40 @@ export function renderCategoryList(
     li.innerHTML = "";
     const input = document.createElement("input");
     input.value = cat.title;
+    input.className = "cat-edit-input";
+    li.classList.add("is-editing");
+    input.setAttribute("aria-label", "カテゴリー名編集");
+    input.setAttribute("data-cat-id", String(id));
+
+    const act = document.createElement("span");
+    act.className = "row-actions editing";
 
     const saveBtn = document.createElement("button");
-    saveBtn.className = "btn-save";
-    saveBtn.textContent = "保存";
+    saveBtn.className = "row-action row-action-save txt-btn";
+    saveBtn.textContent = "Save";
+    saveBtn.title = "Save";
 
     const cancelBtn = document.createElement("button");
-    cancelBtn.className = "btn-cancel";
-    cancelBtn.textContent = "取消";
+    cancelBtn.className = "row-action row-action-cancel txt-btn";
+    cancelBtn.textContent = "Cancel";
+    cancelBtn.title = "Cancel";
 
+    act.appendChild(saveBtn);
+    act.appendChild(cancelBtn);
     li.appendChild(input);
-    li.appendChild(saveBtn);
-    li.appendChild(cancelBtn);
+    li.appendChild(act);
+    setTimeout(() => input.focus(), 0);
+
+    // Enter / ESC キーサポート
+    input.addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter") {
+        const newTitle = input.value.trim();
+        if (!newTitle) return;
+        onEdit(id, newTitle);
+      } else if (ev.key === "Escape") {
+        renderCategoryList(container, categories, onEdit, onDelete);
+      }
+    });
   }
 
   return ul;
