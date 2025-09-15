@@ -1,0 +1,94 @@
+@use "../variables" as *;
+
+header {
+  max-width: 1280px;
+  margin: 0 auto 12px;
+}
+.board {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+  max-width: 1280px;
+  margin: 0 auto;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.board > .col {
+  flex: 1 1 0;
+  min-width: 280px;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: 12px 12px 16px;
+  min-height: 0;
+  box-shadow: $shadow-sm;
+  position: relative;
+  transition: box-shadow $transition-med ease;
+  &:hover {
+    box-shadow: $shadow-hover;
+  }
+}
+.col-title {
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.panel {
+  background: #fafbfc;
+  border: 1px solid #e6e9ec;
+  border-radius: $radius-md;
+  padding: 8px 10px;
+  margin-bottom: 12px;
+}
+.list-panel {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0;
+}
+.list-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.list-panel li + li {
+  margin-top: 2px;
+}
+.placeholder-panel {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-size: 13px;
+  text-align: center;
+  min-height: 160px;
+}
+.placeholder-msg {
+  margin: 0;
+  line-height: 1.6;
+}
+
+@media (prefers-color-scheme: dark) {
+  .col {
+    background: $color-surface-dark;
+    border-color: $color-border-dark;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  .panel {
+    background: #212326;
+    border-color: #323438;
+  }
+  .placeholder-panel {
+    color: #aaa;
+  }
+}
