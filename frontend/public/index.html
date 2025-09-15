@@ -4,7 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo-App</title>
-    <link rel="stylesheet" href="/styles.css?v=20250913b" />
+    <!-- メインスタイル (VSCode Sass 拡張出力) -->
+    <link rel="stylesheet" href="/scss/styles.css" />
     <!-- Material Symbols (Outlined) font loading optimization -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -74,22 +75,19 @@
     <!-- Category Add Dialog -->
     <dialog id="catAddDialog">
       <form method="dialog" id="catAddForm">
-        <h3>カテゴリーを追加</h3>
+        <h3>Add-Category</h3>
         <label>
-          名称
           <input
             name="title"
             id="catAddInput"
             autofocus
             required
-            placeholder="カテゴリー名"
+            placeholder="Category title"
           />
         </label>
         <div class="dlg-actions">
-          <button value="cancel" type="button" id="catAddCancel">
-            キャンセル
-          </button>
-          <button value="submit" type="submit" id="catAddSubmit">追加</button>
+          <button value="cancel" type="button" id="catAddCancel">Cancel</button>
+          <button value="submit" type="submit" id="catAddSubmit">Add</button>
         </div>
       </form>
     </dialog>
