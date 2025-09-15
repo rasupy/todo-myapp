@@ -1,32 +1,21 @@
+### Build (TypeScript -> dist)
 FROM node:20-alpine AS build
-
 WORKDIR /app
-
-# package 定義のみコピーして依存キャッシュ層を最大化
-COPY package.json package-lock.json* ./
-RUN npm ci --no-audit --no-fund
-
-# ソースコピー（不要になった dist は含まない運用想定）
+COPY package.json ./
+RUN --mount=type=cache,target=/root/.npm npm install --no-audit --no-fund
 COPY tsconfig.json ./
-COPY public ./public
 COPY src ./src
-
-# 本番用ビルド (tsc) -- React 等なし純 TS
+ENV NODE_ENV=production
 RUN npm run build
 
-# production stage with nginx
+### Runtime (static files only)
 FROM nginx:stable-alpine
 
-# remove default nginx content
-RUN rm -rf /usr/share/nginx/html/*
+# 公開用静的ファイル: 直接コンテキストから (SCSS 出力を含む public 配下)
+COPY public/ /usr/share/nginx/html/
+# コンパイル済み TS (存在すれば)
+COPY --from=build /app/dist/ /usr/share/nginx/html/
 
-# build ステージの成果物と public を配置
-RUN mkdir -p /usr/share/nginx/html
-COPY --from=build /app/public /usr/share/nginx/html/
-COPY --from=build /app/dist /usr/share/nginx/html/
-
-# copy nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
