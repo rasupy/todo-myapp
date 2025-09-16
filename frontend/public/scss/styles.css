@@ -379,8 +379,27 @@ dialog#catAddDialog .dlg-actions {
   justify-content: flex-end;
   gap: 8px;
 }
-dialog#catAddDialog button {
+dialog#catAddDialog .dlg-actions button {
   cursor: pointer;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  padding: 6px 10px;
+  color: #e5e5e5;
+  border-radius: 4px;
+  line-height: 1.2;
+  transition: background 0.15s, color 0.15s;
+}
+dialog#catAddDialog .dlg-actions button:hover {
+  background: rgba(37, 99, 235, 0.12);
+  color: #2563eb;
+}
+dialog#catAddDialog .dlg-actions button:active {
+  background: rgba(37, 99, 235, 0.24);
+}
+dialog#catAddDialog .dlg-actions button:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
 }
 
 dialog#catAddDialog::backdrop {
