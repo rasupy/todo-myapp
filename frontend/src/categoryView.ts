@@ -1,4 +1,4 @@
-// カテゴリー一覧を表示する機能 (クリックデリゲーション版 + debug)
+// カテゴリー一覧を表示する機能
 import { Category } from "./api.js";
 const D = (...a: any[]) => console.log("[VIEW]", ...a);
 
@@ -14,14 +14,14 @@ export function renderCategoryList(
   D("renderCategoryList:begin", categories.length);
   container.innerHTML = "";
   if (categories.length === 0) {
-    container.textContent = "カテゴリーがありません";
+    container.textContent = "No categories"; // Changed line
     D("renderCategoryList:empty");
     return null;
   }
 
   const ul = document.createElement("ul");
 
-  // アイテムDOM構築 (個別ボタンにリスナは付与しない)
+  // アイテムDOM構築
   categories.forEach((cat) => {
     const li = document.createElement("li");
     li.className = "cat-item";
@@ -37,14 +37,18 @@ export function renderCategoryList(
     actionsWrap.className = "row-actions";
 
     const editBtn = document.createElement("button");
-    editBtn.className = "row-action row-action-edit txt-btn";
-    editBtn.textContent = "Edit";
+    editBtn.className = "row-action row-action-edit icon-btn-sm";
     editBtn.title = "Edit";
+    editBtn.setAttribute("aria-label", "Edit category");
+    editBtn.innerHTML =
+      '<span class="material-symbols-outlined" aria-hidden="true">edit</span>';
 
     const delBtn = document.createElement("button");
-    delBtn.className = "row-action row-action-del txt-btn";
-    delBtn.textContent = "Delete";
+    delBtn.className = "row-action row-action-del icon-btn-sm";
     delBtn.title = "Delete";
+    delBtn.setAttribute("aria-label", "Delete category");
+    delBtn.innerHTML =
+      '<span class="material-symbols-outlined" aria-hidden="true">delete</span>';
 
     actionsWrap.appendChild(editBtn);
     actionsWrap.appendChild(delBtn);
@@ -53,7 +57,7 @@ export function renderCategoryList(
     ul.appendChild(li);
   });
 
-  // クリックデリゲーション: 親ulに1つだけイベント登録
+  // クリックでイベント処理
   ul.addEventListener("click", (e) => {
     const target = e.target as HTMLElement;
     const li = target.closest("li.cat-item") as HTMLElement | null;
@@ -70,7 +74,7 @@ export function renderCategoryList(
     // 削除
     if (target.closest(".row-action-del")) {
       D("click:delete", id);
-      if (confirm("削除してよろしいですか？")) onDelete(id);
+      if (confirm("Are you sure you want to delete this?")) onDelete(id);
       return;
     }
     // 保存
@@ -86,7 +90,6 @@ export function renderCategoryList(
     // 取消
     if (target.closest(".row-action-cancel")) {
       D("click:cancel", id);
-      // 元のリスト全体を再レンダ
       renderCategoryList(container, categories, onEdit, onDelete);
       return;
     }
@@ -104,7 +107,7 @@ export function renderCategoryList(
     input.value = cat.title;
     input.className = "cat-edit-input";
     li.classList.add("is-editing");
-    input.setAttribute("aria-label", "カテゴリー名編集");
+    input.setAttribute("aria-label", "Edit category name");
     input.setAttribute("data-cat-id", String(id));
 
     const act = document.createElement("span");
