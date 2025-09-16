@@ -324,10 +324,27 @@ header {
 
 .cat-edit-input {
   width: 60%;
-  max-width: 300px;
-  padding: 4px 6px;
-  font-size: 14px;
+  max-width: 320px;
+  padding: 10px 12px;
+  font-size: 15px;
+  line-height: 1.4;
   box-sizing: border-box;
+  border: 1px solid #d0d5da;
+  border-radius: 6px;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.cat-edit-input::-moz-placeholder {
+  color: #8a8f96;
+}
+.cat-edit-input::placeholder {
+  color: #8a8f96;
+}
+.cat-edit-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+  background: #ffffff;
 }
 
 #categories[data-loading="1"] {
@@ -427,6 +444,22 @@ dialog#catAddDialog::backdrop {
 @media (prefers-color-scheme: dark) {
   .cat-item.is-editing {
     background: #233041;
+  }
+  .cat-edit-input {
+    background: #2a2c30;
+    border-color: #50555c;
+    color: #e4e6eb;
+  }
+  .cat-edit-input::-moz-placeholder {
+    color: #9aa0a6;
+  }
+  .cat-edit-input::placeholder {
+    color: #9aa0a6;
+  }
+  .cat-edit-input:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+    background: #2f3236;
   }
   .icon-btn-sm:hover {
     background: rgba(255, 255, 255, 0.08);

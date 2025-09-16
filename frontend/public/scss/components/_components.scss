@@ -173,10 +173,25 @@
 }
 .cat-edit-input {
   width: 60%;
-  max-width: 300px;
-  padding: 4px 6px;
-  font-size: 14px;
+  max-width: 320px;
+  padding: 10px 12px; // モーダルと揃える
+  font-size: 15px;
+  line-height: 1.4;
   box-sizing: border-box;
+  border: 1px solid #d0d5da;
+  border-radius: $radius-md;
+  background: #fff;
+  transition: border-color $transition-fast, box-shadow $transition-fast,
+    background $transition-fast;
+  &::placeholder {
+    color: #8a8f96;
+  }
+  &:focus {
+    outline: none;
+    border-color: $color-accent;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+    background: #ffffff;
+  }
 }
 #categories[data-loading="1"] {
   opacity: 0.5;
@@ -270,6 +285,19 @@ dialog#catAddDialog::backdrop {
 @media (prefers-color-scheme: dark) {
   .cat-item.is-editing {
     background: #233041;
+  }
+  .cat-edit-input {
+    background: $color-surface-dark;
+    border-color: #50555c;
+    color: #e4e6eb;
+    &::placeholder {
+      color: #9aa0a6;
+    }
+    &:focus {
+      border-color: $color-accent-dark;
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+      background: #2f3236;
+    }
   }
   .icon-btn-sm:hover {
     background: rgba(255, 255, 255, 0.08);
