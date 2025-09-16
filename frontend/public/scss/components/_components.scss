@@ -58,8 +58,20 @@
   user-select: none;
   touch-action: none;
   cursor: grab;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   .title {
+    flex: 1 1 auto;
     margin-left: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .row-actions {
+    margin-left: auto;
+    display: inline-flex;
+    gap: 4px;
   }
   &.dragging {
     opacity: 0.95;
@@ -82,11 +94,7 @@
   min-height: 36px;
   transition: background-color 120ms ease;
 }
-.row-actions {
-  display: inline-flex;
-  gap: 4px;
-  margin-left: 8px;
-}
+
 .icon-btn-sm {
   background: transparent;
   border: 0;
@@ -99,14 +107,18 @@
   border-radius: $radius-sm;
   cursor: pointer;
   transition: background $transition-fast;
+  color: #fff; // アイコン色白
   .material-symbols-outlined {
     font-size: 20px;
+    color: inherit; // 継承
   }
   &:hover {
-    background: rgba(0, 0, 0, 0.06);
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff; // 変化させない
   }
   &:active {
-    background: rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.28);
+    color: #fff;
   }
 }
 .icon-btn {
