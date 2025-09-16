@@ -114,14 +114,18 @@ export function renderCategoryList(
     act.className = "row-actions editing";
 
     const saveBtn = document.createElement("button");
-    saveBtn.className = "row-action row-action-save txt-btn";
-    saveBtn.textContent = "Save";
+    saveBtn.className = "row-action row-action-save icon-btn-sm";
     saveBtn.title = "Save";
+    saveBtn.setAttribute("aria-label", "Save category");
+    saveBtn.innerHTML =
+      '<span class="material-symbols-outlined" aria-hidden="true">add_circle</span>';
 
     const cancelBtn = document.createElement("button");
-    cancelBtn.className = "row-action row-action-cancel txt-btn";
-    cancelBtn.textContent = "Cancel";
+    cancelBtn.className = "row-action row-action-cancel icon-btn-sm";
     cancelBtn.title = "Cancel";
+    cancelBtn.setAttribute("aria-label", "Cancel editing");
+    cancelBtn.innerHTML =
+      '<span class="material-symbols-outlined" aria-hidden="true">cancel</span>';
 
     act.appendChild(saveBtn);
     act.appendChild(cancelBtn);
