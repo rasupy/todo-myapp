@@ -14,9 +14,18 @@ export function renderCategoryList(
   D("renderCategoryList:begin", categories.length);
   container.innerHTML = "";
   if (categories.length === 0) {
-    container.textContent = "No categories"; // Changed line
+    container.classList.remove("list-panel");
+    container.classList.add("placeholder-panel");
+    const p = document.createElement("p");
+    p.className = "placeholder-msg";
+    p.textContent = "No categories";
+    container.appendChild(p);
     D("renderCategoryList:empty");
     return null;
+  } else {
+    // 通常リスト表示時は placeholder クラスを外しスクロール可能に戻す
+    container.classList.add("list-panel");
+    container.classList.remove("placeholder-panel");
   }
 
   const ul = document.createElement("ul");
