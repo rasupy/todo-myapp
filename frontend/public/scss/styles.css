@@ -62,9 +62,14 @@ header {
 
 .board > .col {
   flex: 1 1 0;
-  min-width: 280px;
+  min-width: 360px;
 }
 
+@media (max-width: 920px) {
+  .board > .col {
+    min-width: 280px;
+  }
+}
 .col {
   display: flex;
   flex-direction: column;

@@ -18,3 +18,10 @@ $shadow-dialog: 0 10px 28px rgba(0, 0, 0, 0.18), 0 4px 8px rgba(0, 0, 0, 0.08);
 $transition-fast: 0.15s;
 $transition-med: 0.18s;
 $font-body: Arial, Helvetica, sans-serif;
+
+// Layout
+$layout-max-width: 1280px;
+
+// Column width
+$col-min-width: 360px; // default wider column
+$col-min-width-sm: 280px; // fallback on narrow viewports

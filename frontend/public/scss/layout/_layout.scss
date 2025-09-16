@@ -1,14 +1,14 @@
 @use "../variables" as *;
 
 header {
-  max-width: 1280px;
+  max-width: $layout-max-width;
   margin: 0 auto 12px;
 }
 .board {
   display: flex;
   gap: 16px;
   align-items: stretch;
-  max-width: 1280px;
+  max-width: $layout-max-width;
   margin: 0 auto;
   overflow-x: auto;
   padding-bottom: 4px;
@@ -17,7 +17,14 @@ header {
 }
 .board > .col {
   flex: 1 1 0;
-  min-width: 280px;
+  min-width: $col-min-width;
+}
+
+// 狭い画面では既存幅にフォールバック
+@media (max-width: 920px) {
+  .board > .col {
+    min-width: $col-min-width-sm;
+  }
 }
 .col {
   display: flex;
