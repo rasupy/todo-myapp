@@ -1,0 +1,27 @@
+// Design Tokens
+$color-bg-light: #f5f7fa;
+$color-bg-dark: #1e1f22;
+$color-surface: #ffffff;
+$color-surface-contrast: #e5e5e5;
+$color-surface-dark: #2a2c30;
+$color-border: #e5e5e5;
+$color-border-dark: #3a3d41;
+$color-accent: #2563eb;
+$color-accent-dark: #60a5fa;
+$color-accent-active: #1d4ed8;
+$radius-sm: 4px;
+$radius-md: 6px;
+$radius-lg: 8px;
+$shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+$shadow-hover: 0 4px 10px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+$shadow-dialog: 0 10px 28px rgba(0, 0, 0, 0.18), 0 4px 8px rgba(0, 0, 0, 0.08);
+$transition-fast: 0.15s;
+$transition-med: 0.18s;
+$font-body: Arial, Helvetica, sans-serif;
+
+// Layout
+$layout-max-width: 1280px;
+
+// Column width
+$col-min-width: 360px; // default wider column
+$col-min-width-sm: 280px; // fallback on narrow viewports

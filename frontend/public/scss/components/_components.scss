@@ -1,0 +1,354 @@
+@use "../variables" as *;
+
+#categoryHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.header-actions {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.btn-add {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #333;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0;
+  .material-symbols-outlined {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    line-height: 1;
+  }
+  &:hover {
+    color: $color-accent;
+  }
+  &:active {
+    color: $color-accent-active;
+  }
+  &:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .btn-add {
+    color: #e4e6eb;
+    &:hover {
+      color: $color-accent-dark;
+    }
+    &:active {
+      color: #3b82f6;
+    }
+  }
+}
+
+.cat-item {
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+  user-select: none;
+  touch-action: none;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  .title {
+    flex: 1 1 auto;
+    margin-left: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .row-actions {
+    margin-left: auto;
+    display: inline-flex;
+    gap: 4px;
+  }
+  &.dragging {
+    opacity: 0.95;
+    transform: scale(1.02);
+    transition: transform 120ms ease-out;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    background: #fff;
+    border-radius: $radius-md;
+    cursor: grabbing;
+  }
+  &.is-editing {
+    background: #eef6ff;
+  }
+}
+.placeholder {
+  background: #fff;
+  border: 2px dashed #e0e0e0;
+  border-radius: $radius-md;
+  margin: 4px 0;
+  min-height: 36px;
+  transition: background-color 120ms ease;
+}
+
+.icon-btn-sm {
+  background: transparent;
+  border: 0;
+  padding: 2px;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  transition: background $transition-fast;
+  color: #fff; // アイコン色白
+  .material-symbols-outlined {
+    font-size: 20px;
+    color: inherit; // 継承
+  }
+  &:hover {
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff; // 変化させない
+  }
+  &:active {
+    background: rgba(255, 255, 255, 0.28);
+    color: #fff;
+  }
+}
+.icon-btn {
+  background: #ffffff;
+  border: 1px solid #d5d9dd;
+  border-radius: $radius-md;
+  padding: 2px 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background $transition-fast, box-shadow $transition-fast,
+    border-color $transition-fast;
+  .material-symbols-outlined {
+    font-size: 20px;
+  }
+  &:hover {
+    background: #f0f3f6;
+  }
+  &:active {
+    background: #e2e7ec;
+  }
+  &:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 1px;
+  }
+}
+.txt-btn {
+  background: transparent;
+  border: none;
+  padding: 2px 4px;
+  font-size: 12px;
+  cursor: pointer;
+  color: $color-accent;
+  border-radius: $radius-sm;
+  transition: background $transition-fast, color $transition-fast;
+  &:hover {
+    background: rgba(37, 99, 235, 0.12);
+  }
+  &:active {
+    background: rgba(37, 99, 235, 0.24);
+  }
+  &:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+}
+.cat-item.editing .row-action-edit,
+.cat-item.editing .row-action-del {
+  display: none;
+}
+.cat-edit-input {
+  width: 60%;
+  max-width: 320px;
+  padding: 10px 12px; // モーダルと揃える
+  font-size: 15px;
+  line-height: 1.4;
+  box-sizing: border-box;
+  border: 1px solid #d0d5da;
+  border-radius: $radius-md;
+  background: #fff;
+  transition: border-color $transition-fast, box-shadow $transition-fast,
+    background $transition-fast;
+  &::placeholder {
+    color: #8a8f96;
+  }
+  &:focus {
+    outline: none;
+    border-color: $color-accent;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+    background: #ffffff;
+  }
+}
+#categories[data-loading="1"] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Dialog */
+dialog#catAddDialog {
+  border: 1px solid #d0d5da;
+  border-radius: 12px;
+  padding: 18px 20px 20px;
+  width: 320px;
+  max-width: calc(100vw - 32px);
+  box-shadow: $shadow-dialog;
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  // カテゴリー追加入力フィールド拡張スタイル
+  #catAddInput {
+    padding: 10px 12px; // 内余白拡大で視認性向上
+    font-size: 15px;
+    line-height: 1.4;
+    border: 1px solid #d0d5da;
+    border-radius: $radius-md;
+    background: #fff;
+    transition: border-color $transition-fast, box-shadow $transition-fast,
+      background $transition-fast;
+    &::placeholder {
+      color: #8a8f96;
+    }
+    &:focus {
+      outline: none;
+      border-color: $color-accent;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+      background: #ffffff;
+    }
+  }
+  .dlg-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  .dlg-actions button {
+    cursor: pointer;
+    font-weight: 600; // 太字
+    background: transparent; // 透明
+    border: none; // ボックスなし
+    padding: 6px 10px;
+    color: $color-surface-contrast;
+    border-radius: $radius-sm;
+    line-height: 1.2;
+    transition: background $transition-fast, color $transition-fast;
+    &:hover {
+      background: rgba(37, 99, 235, 0.12);
+      color: $color-accent;
+    }
+    &:active {
+      background: rgba(37, 99, 235, 0.24);
+    }
+    &:focus-visible {
+      outline: 2px solid $color-accent;
+      outline-offset: 2px;
+    }
+  }
+}
+dialog#catAddDialog::backdrop {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Scrollbar */
+.list-panel::-webkit-scrollbar {
+  width: 8px;
+}
+.list-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+.list-panel::-webkit-scrollbar-thumb {
+  background: #d0d5da;
+  border-radius: 4px;
+}
+.list-panel::-webkit-scrollbar-thumb:hover {
+  background: #b8bfc6;
+}
+
+@media (prefers-color-scheme: dark) {
+  .cat-item.is-editing {
+    background: #233041;
+  }
+  .cat-edit-input {
+    background: $color-surface-dark;
+    border-color: #50555c;
+    color: #e4e6eb;
+    &::placeholder {
+      color: #9aa0a6;
+    }
+    &:focus {
+      border-color: $color-accent-dark;
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+      background: #2f3236;
+    }
+  }
+  .icon-btn-sm:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .icon-btn-sm:active {
+    background: rgba(255, 255, 255, 0.16);
+  }
+  .icon-btn {
+    background: #2f3236;
+    border-color: #41454a;
+    color: #e4e6eb;
+    &:hover {
+      background: #3a3d41;
+    }
+    &:active {
+      background: #454a50;
+    }
+  }
+  dialog#catAddDialog {
+    background: $color-surface-dark;
+    color: #e4e6eb;
+    border-color: $color-border-dark;
+  }
+  dialog#catAddDialog #catAddInput {
+    background: $color-surface-dark;
+    border-color: #50555c;
+    color: #e4e6eb;
+    &::placeholder {
+      color: #9aa0a6;
+    }
+    &:focus {
+      border-color: $color-accent-dark;
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+      background: #2f3236;
+    }
+  }
+  .list-panel li {
+    border-bottom-color: $color-border-dark;
+  }
+  .placeholder {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: #50555c;
+  }
+  .list-panel::-webkit-scrollbar-thumb {
+    background: #4a4f55;
+  }
+  .list-panel::-webkit-scrollbar-thumb:hover {
+    background: #5c6268;
+  }
+  .cat-item.dragging {
+    background: #313539;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
+  }
+}

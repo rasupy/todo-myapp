@@ -1,0 +1,5 @@
+@use "../variables" as *;
+/* Utilities */
+.placeholder {
+  transition: background-color 120ms ease;
+}

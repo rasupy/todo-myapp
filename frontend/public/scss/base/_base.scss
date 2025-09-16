@@ -1,0 +1,42 @@
+@use "../variables" as *;
+
+body {
+  font-family: $font-body;
+  padding: 0;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: $color-bg-light;
+}
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+#app > header {
+  flex: 0 0 auto;
+}
+#app > .board {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+input {
+  margin-right: 8px;
+}
+pre {
+  background: #f6f8fa;
+  padding: 12px;
+  border-radius: $radius-md;
+  white-space: pre-wrap;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: $color-bg-dark;
+    color: #e4e6eb;
+  }
+  pre {
+    background: $color-surface-dark;
+  }
+}

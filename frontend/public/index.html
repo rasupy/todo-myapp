@@ -4,7 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo-App</title>
-    <link rel="stylesheet" href="/styles.css?v=20250913b" />
+    <!-- メインスタイル (VSCode Sass 拡張出力) -->
+    <link rel="stylesheet" href="/scss/styles.css" />
     <!-- Material Symbols (Outlined) font loading optimization -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -50,14 +51,14 @@
               </button>
             </span>
           </h2>
-          <div id="categories" class="panel list-panel">読み込み待ち...</div>
+          <div id="categories" class="panel list-panel">Now loading...</div>
         </section>
         <!-- Tasks -->
         <section class="col col-task">
           <h2 class="col-title">Task</h2>
           <div id="tasks" class="panel placeholder-panel">
             <p class="placeholder-msg">
-              カテゴリーをクリックするとタスク一覧（未実装）がここに表示されます。
+              Click a category to see tasks (not implemented).
             </p>
           </div>
         </section>
@@ -65,31 +66,28 @@
         <section class="col col-archive">
           <h2 class="col-title">Archive</h2>
           <div id="archive" class="panel placeholder-panel">
-            <p class="placeholder-msg">アーカイブ（未実装）</p>
+            <p class="placeholder-msg">Archive (not implemented)</p>
           </div>
         </section>
       </div>
       <pre id="result"></pre>
     </div>
-    <!-- Category Add Dialog -->
+    <!-- Category Add modal -->
     <dialog id="catAddDialog">
       <form method="dialog" id="catAddForm">
-        <h3>カテゴリーを追加</h3>
+        <h3>Add-Category</h3>
         <label>
-          名称
           <input
             name="title"
             id="catAddInput"
             autofocus
             required
-            placeholder="カテゴリー名"
+            placeholder="please enter category name."
           />
         </label>
         <div class="dlg-actions">
-          <button value="cancel" type="button" id="catAddCancel">
-            キャンセル
-          </button>
-          <button value="submit" type="submit" id="catAddSubmit">追加</button>
+          <button value="submit" type="submit" id="catAddSubmit">Add</button>
+          <button value="cancel" type="button" id="catAddCancel">Cancel</button>
         </div>
       </form>
     </dialog>
