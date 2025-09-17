@@ -198,8 +198,10 @@
   pointer-events: none;
 }
 
-/* Dialog */
-dialog#catAddDialog {
+/* モーダルのスタイル */
+dialog#catAddDialog,
+dialog#taskAddDialog,
+dialog#taskEditDialog {
   border: 1px solid #d0d5da;
   border-radius: 12px;
   padding: 18px 20px 20px;
@@ -211,13 +213,18 @@ dialog#catAddDialog {
     flex-direction: column;
     gap: 14px;
   }
-  input {
+  input,
+  textarea {
     width: 100%;
     box-sizing: border-box;
   }
   // カテゴリー追加入力フィールド拡張スタイル
-  #catAddInput {
-    padding: 10px 12px; // 内余白拡大で視認性向上
+  #catAddInput,
+  #taskAddTitle,
+  #taskEditTitle,
+  #taskAddContent,
+  #taskEditContent {
+    padding: 10px 12px; // 内余白拡大
     font-size: 15px;
     line-height: 1.4;
     border: 1px solid #d0d5da;
@@ -263,7 +270,9 @@ dialog#catAddDialog {
     }
   }
 }
-dialog#catAddDialog::backdrop {
+dialog#catAddDialog::backdrop,
+dialog#taskAddDialog::backdrop,
+dialog#taskEditDialog::backdrop {
   background: rgba(0, 0, 0, 0.3);
 }
 
@@ -316,12 +325,18 @@ dialog#catAddDialog::backdrop {
       background: #454a50;
     }
   }
-  dialog#catAddDialog {
+  dialog#catAddDialog,
+  dialog#taskAddDialog,
+  dialog#taskEditDialog {
     background: $color-surface-dark;
     color: #e4e6eb;
     border-color: $color-border-dark;
   }
-  dialog#catAddDialog #catAddInput {
+  dialog#catAddDialog #catAddInput,
+  dialog#taskAddDialog #taskAddTitle,
+  dialog#taskAddDialog #taskAddContent,
+  dialog#taskEditDialog #taskEditTitle,
+  dialog#taskEditDialog #taskEditContent {
     background: $color-surface-dark;
     border-color: #50555c;
     color: #e4e6eb;
@@ -348,6 +363,49 @@ dialog#catAddDialog::backdrop {
     background: #5c6268;
   }
   .cat-item.dragging {
+    background: #313539;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* タスクアイテムのスタイル */
+.task-item {
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+  user-select: none;
+  touch-action: none;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  .task-title {
+    flex: 1 1 auto;
+    margin-left: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .row-actions {
+    margin-left: auto; // 右詰め
+    display: inline-flex;
+    gap: 4px;
+  }
+  &.dragging {
+    opacity: 0.95;
+    transform: scale(1.02);
+    transition: transform 120ms ease-out;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    background: #fff;
+    border-radius: $radius-md;
+    cursor: grabbing;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .task-item {
+    border-bottom-color: $color-border-dark;
+  }
+  .task-item.dragging {
     background: #313539;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
   }
