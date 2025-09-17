@@ -1,17 +1,19 @@
 // カテゴリー一覧を表示する機能
 import { Category } from "./api.js";
-const D = (...a: any[]) => console.log("[VIEW]", ...a);
 
 export type OnEdit = (id: number, title: string) => void;
 export type OnDelete = (id: number) => void;
+export type OnSelect = (category: Category) => void;
+export type OnAddTask = (category: Category) => void;
 
 export function renderCategoryList(
   container: HTMLElement,
   categories: Category[],
   onEdit: OnEdit,
-  onDelete: OnDelete
+  onDelete: OnDelete,
+  onSelect?: OnSelect,
+  onAddTask?: OnAddTask
 ): HTMLUListElement | null {
-  D("renderCategoryList:begin", categories.length);
   container.innerHTML = "";
   if (categories.length === 0) {
     container.classList.remove("list-panel");
@@ -20,7 +22,6 @@ export function renderCategoryList(
     p.className = "placeholder-msg";
     p.textContent = "No categories";
     container.appendChild(p);
-    D("renderCategoryList:empty");
     return null;
   } else {
     // 通常リスト表示時は placeholder クラスを外しスクロール可能に戻す
@@ -45,6 +46,13 @@ export function renderCategoryList(
     const actionsWrap = document.createElement("span");
     actionsWrap.className = "row-actions";
 
+    const addTaskBtn = document.createElement("button");
+    addTaskBtn.className = "row-action row-action-add icon-btn-sm";
+    addTaskBtn.title = "Add task";
+    addTaskBtn.setAttribute("aria-label", "Add task to category");
+    addTaskBtn.innerHTML =
+      '<span class="material-symbols-outlined" aria-hidden="true">add</span>';
+
     const editBtn = document.createElement("button");
     editBtn.className = "row-action row-action-edit icon-btn-sm";
     editBtn.title = "Edit";
@@ -59,6 +67,7 @@ export function renderCategoryList(
     delBtn.innerHTML =
       '<span class="material-symbols-outlined" aria-hidden="true">delete</span>';
 
+    actionsWrap.appendChild(addTaskBtn);
     actionsWrap.appendChild(editBtn);
     actionsWrap.appendChild(delBtn);
     li.appendChild(span);
@@ -76,19 +85,22 @@ export function renderCategoryList(
 
     // 編集開始
     if (target.closest(".row-action-edit")) {
-      D("click:edit", id);
       startEdit(li, id);
+      return;
+    }
+    // タスク追加モーダル
+    if (target.closest(".row-action-add")) {
+      const cat = categories.find((c) => c.id === id);
+      if (cat) onAddTask?.(cat);
       return;
     }
     // 削除
     if (target.closest(".row-action-del")) {
-      D("click:delete", id);
       if (confirm("Are you sure you want to delete this?")) onDelete(id);
       return;
     }
     // 保存
     if (target.closest(".row-action-save")) {
-      D("click:save", id);
       const input = li.querySelector("input") as HTMLInputElement | null;
       if (!input) return;
       const newTitle = input.value.trim();
@@ -98,19 +110,30 @@ export function renderCategoryList(
     }
     // 取消
     if (target.closest(".row-action-cancel")) {
-      D("click:cancel", id);
-      renderCategoryList(container, categories, onEdit, onDelete);
+      renderCategoryList(
+        container,
+        categories,
+        onEdit,
+        onDelete,
+        onSelect,
+        onAddTask
+      );
+      return;
+    }
+
+    // 行選択（上記のいずれにも該当しない場合）
+    if (!target.closest(".row-actions")) {
+      const cat = categories.find((c) => c.id === id);
+      if (cat) onSelect?.(cat);
       return;
     }
   });
 
   container.appendChild(ul);
-  D("renderCategoryList:end");
 
   function startEdit(li: HTMLElement, id: number) {
     const cat = categories.find((c) => c.id === id);
     if (!cat) return;
-    D("startEdit", id);
     li.innerHTML = "";
     const input = document.createElement("input");
     input.value = cat.title;
@@ -142,14 +165,12 @@ export function renderCategoryList(
     li.appendChild(act);
     setTimeout(() => input.focus(), 0);
 
-    // Enter / ESC キーサポート
+    // Enter キーで保存
     input.addEventListener("keydown", (ev) => {
       if (ev.key === "Enter") {
         const newTitle = input.value.trim();
         if (!newTitle) return;
         onEdit(id, newTitle);
-      } else if (ev.key === "Escape") {
-        renderCategoryList(container, categories, onEdit, onDelete);
       }
     });
   }
