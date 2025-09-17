@@ -1,12 +1,12 @@
-// 並べ替え（ドラッグ＆ドロップ）を担当するモジュール
+// カテゴリーの並べ替え
 import { reorderCategories } from "./api.js";
 
-// ul 要素に対して sortable を設定する。onReorder が与えられればサーバー送信をカスタム処理可能
+// ul 要素に対して sortable を設定する
 export function makeSortable(
   ul: HTMLUListElement,
   onReorder?: (orderedIds: number[]) => Promise<void>
 ) {
-  // avoid binding multiple times to the same element
+  // すでに sortable 設定済みなら何もしない
   if ((ul as any).dataset.sortable === "1") return;
   (ul as any).dataset.sortable = "1";
 
@@ -58,9 +58,9 @@ export function makeSortable(
     started = true;
   }
 
+  // ドラッグ中の要素を移動させる
   const onPointerMove = (pm: PointerEvent) => {
     if (!dragEl) return;
-    // まだ実ドラッグ開始していなければ判定
     if (!started) {
       const dx = pm.clientX - startX;
       const dy = pm.clientY - startY;
@@ -95,7 +95,6 @@ export function makeSortable(
         else await reorderCategories(ordered);
       }
     } catch (err) {
-      console.error(err);
       alert("並び替えの保存に失敗しました");
     } finally {
       cleanup(pu);
