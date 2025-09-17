@@ -14,14 +14,13 @@ export async function removeCategory(
   id: number,
   opts: DeleteOptions = {}
 ): Promise<boolean> {
-  if (inFlight.has(id)) return false; // 既に進行中
+  if (inFlight.has(id)) return false;
   inFlight.add(id);
   opts.before?.(id);
   try {
     await deleteCategory(id, opts.userId ?? 1);
     return true;
   } catch (e) {
-    console.error("カテゴリー削除失敗", e);
     throw e;
   } finally {
     inFlight.delete(id);
