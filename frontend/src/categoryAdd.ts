@@ -71,7 +71,6 @@ export function initCategoryAdd(options: CategoryAddOptions = {}) {
       await options.onAdded?.();
       dlg.close();
     } catch (err: any) {
-      console.error(err);
       alert(`追加に失敗しました\n${err?.message ?? "Unknown error"}`);
     } finally {
       btnSubmit.disabled = false;

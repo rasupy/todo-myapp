@@ -1,3 +1,4 @@
+@charset "UTF-8";
 body {
   font-family: Arial, Helvetica, sans-serif;
   padding: 0;
@@ -357,8 +358,10 @@ header {
   pointer-events: none;
 }
 
-/* Dialog */
-dialog#catAddDialog {
+/* モーダルのスタイル */
+dialog#catAddDialog,
+dialog#taskAddDialog,
+dialog#taskEditDialog {
   border: 1px solid #d0d5da;
   border-radius: 12px;
   padding: 18px 20px 20px;
@@ -366,16 +369,37 @@ dialog#catAddDialog {
   max-width: calc(100vw - 32px);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18), 0 4px 8px rgba(0, 0, 0, 0.08);
 }
-dialog#catAddDialog form {
+dialog#catAddDialog form,
+dialog#taskAddDialog form,
+dialog#taskEditDialog form {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
-dialog#catAddDialog input {
+dialog#catAddDialog input,
+dialog#catAddDialog textarea,
+dialog#taskAddDialog input,
+dialog#taskAddDialog textarea,
+dialog#taskEditDialog input,
+dialog#taskEditDialog textarea {
   width: 100%;
   box-sizing: border-box;
 }
-dialog#catAddDialog #catAddInput {
+dialog#catAddDialog #catAddInput,
+dialog#catAddDialog #taskAddTitle,
+dialog#catAddDialog #taskEditTitle,
+dialog#catAddDialog #taskAddContent,
+dialog#catAddDialog #taskEditContent,
+dialog#taskAddDialog #catAddInput,
+dialog#taskAddDialog #taskAddTitle,
+dialog#taskAddDialog #taskEditTitle,
+dialog#taskAddDialog #taskAddContent,
+dialog#taskAddDialog #taskEditContent,
+dialog#taskEditDialog #catAddInput,
+dialog#taskEditDialog #taskAddTitle,
+dialog#taskEditDialog #taskEditTitle,
+dialog#taskEditDialog #taskAddContent,
+dialog#taskEditDialog #taskEditContent {
   padding: 10px 12px;
   font-size: 15px;
   line-height: 1.4;
@@ -384,24 +408,56 @@ dialog#catAddDialog #catAddInput {
   background: #fff;
   transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
 }
-dialog#catAddDialog #catAddInput::-moz-placeholder {
+dialog#catAddDialog #catAddInput::-moz-placeholder, dialog#catAddDialog #taskAddTitle::-moz-placeholder, dialog#catAddDialog #taskEditTitle::-moz-placeholder, dialog#catAddDialog #taskAddContent::-moz-placeholder, dialog#catAddDialog #taskEditContent::-moz-placeholder, dialog#taskAddDialog #catAddInput::-moz-placeholder, dialog#taskAddDialog #taskAddTitle::-moz-placeholder, dialog#taskAddDialog #taskEditTitle::-moz-placeholder, dialog#taskAddDialog #taskAddContent::-moz-placeholder, dialog#taskAddDialog #taskEditContent::-moz-placeholder, dialog#taskEditDialog #catAddInput::-moz-placeholder, dialog#taskEditDialog #taskAddTitle::-moz-placeholder, dialog#taskEditDialog #taskEditTitle::-moz-placeholder, dialog#taskEditDialog #taskAddContent::-moz-placeholder, dialog#taskEditDialog #taskEditContent::-moz-placeholder {
   color: #8a8f96;
 }
-dialog#catAddDialog #catAddInput::placeholder {
+dialog#catAddDialog #catAddInput::placeholder,
+dialog#catAddDialog #taskAddTitle::placeholder,
+dialog#catAddDialog #taskEditTitle::placeholder,
+dialog#catAddDialog #taskAddContent::placeholder,
+dialog#catAddDialog #taskEditContent::placeholder,
+dialog#taskAddDialog #catAddInput::placeholder,
+dialog#taskAddDialog #taskAddTitle::placeholder,
+dialog#taskAddDialog #taskEditTitle::placeholder,
+dialog#taskAddDialog #taskAddContent::placeholder,
+dialog#taskAddDialog #taskEditContent::placeholder,
+dialog#taskEditDialog #catAddInput::placeholder,
+dialog#taskEditDialog #taskAddTitle::placeholder,
+dialog#taskEditDialog #taskEditTitle::placeholder,
+dialog#taskEditDialog #taskAddContent::placeholder,
+dialog#taskEditDialog #taskEditContent::placeholder {
   color: #8a8f96;
 }
-dialog#catAddDialog #catAddInput:focus {
+dialog#catAddDialog #catAddInput:focus,
+dialog#catAddDialog #taskAddTitle:focus,
+dialog#catAddDialog #taskEditTitle:focus,
+dialog#catAddDialog #taskAddContent:focus,
+dialog#catAddDialog #taskEditContent:focus,
+dialog#taskAddDialog #catAddInput:focus,
+dialog#taskAddDialog #taskAddTitle:focus,
+dialog#taskAddDialog #taskEditTitle:focus,
+dialog#taskAddDialog #taskAddContent:focus,
+dialog#taskAddDialog #taskEditContent:focus,
+dialog#taskEditDialog #catAddInput:focus,
+dialog#taskEditDialog #taskAddTitle:focus,
+dialog#taskEditDialog #taskEditTitle:focus,
+dialog#taskEditDialog #taskAddContent:focus,
+dialog#taskEditDialog #taskEditContent:focus {
   outline: none;
   border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
   background: #ffffff;
 }
-dialog#catAddDialog .dlg-actions {
+dialog#catAddDialog .dlg-actions,
+dialog#taskAddDialog .dlg-actions,
+dialog#taskEditDialog .dlg-actions {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
 }
-dialog#catAddDialog .dlg-actions button {
+dialog#catAddDialog .dlg-actions button,
+dialog#taskAddDialog .dlg-actions button,
+dialog#taskEditDialog .dlg-actions button {
   cursor: pointer;
   font-weight: 600;
   background: transparent;
@@ -412,19 +468,27 @@ dialog#catAddDialog .dlg-actions button {
   line-height: 1.2;
   transition: background 0.15s, color 0.15s;
 }
-dialog#catAddDialog .dlg-actions button:hover {
+dialog#catAddDialog .dlg-actions button:hover,
+dialog#taskAddDialog .dlg-actions button:hover,
+dialog#taskEditDialog .dlg-actions button:hover {
   background: rgba(37, 99, 235, 0.12);
   color: #2563eb;
 }
-dialog#catAddDialog .dlg-actions button:active {
+dialog#catAddDialog .dlg-actions button:active,
+dialog#taskAddDialog .dlg-actions button:active,
+dialog#taskEditDialog .dlg-actions button:active {
   background: rgba(37, 99, 235, 0.24);
 }
-dialog#catAddDialog .dlg-actions button:focus-visible {
+dialog#catAddDialog .dlg-actions button:focus-visible,
+dialog#taskAddDialog .dlg-actions button:focus-visible,
+dialog#taskEditDialog .dlg-actions button:focus-visible {
   outline: 2px solid #2563eb;
   outline-offset: 2px;
 }
 
-dialog#catAddDialog::backdrop {
+dialog#catAddDialog::backdrop,
+dialog#taskAddDialog::backdrop,
+dialog#taskEditDialog::backdrop {
   background: rgba(0, 0, 0, 0.3);
 }
 
@@ -483,23 +547,37 @@ dialog#catAddDialog::backdrop {
   .icon-btn:active {
     background: #454a50;
   }
-  dialog#catAddDialog {
+  dialog#catAddDialog,
+  dialog#taskAddDialog,
+  dialog#taskEditDialog {
     background: #2a2c30;
     color: #e4e6eb;
     border-color: #3a3d41;
   }
-  dialog#catAddDialog #catAddInput {
+  dialog#catAddDialog #catAddInput,
+  dialog#taskAddDialog #taskAddTitle,
+  dialog#taskAddDialog #taskAddContent,
+  dialog#taskEditDialog #taskEditTitle,
+  dialog#taskEditDialog #taskEditContent {
     background: #2a2c30;
     border-color: #50555c;
     color: #e4e6eb;
   }
-  dialog#catAddDialog #catAddInput::-moz-placeholder {
+  dialog#catAddDialog #catAddInput::-moz-placeholder, dialog#taskAddDialog #taskAddTitle::-moz-placeholder, dialog#taskAddDialog #taskAddContent::-moz-placeholder, dialog#taskEditDialog #taskEditTitle::-moz-placeholder, dialog#taskEditDialog #taskEditContent::-moz-placeholder {
     color: #9aa0a6;
   }
-  dialog#catAddDialog #catAddInput::placeholder {
+  dialog#catAddDialog #catAddInput::placeholder,
+  dialog#taskAddDialog #taskAddTitle::placeholder,
+  dialog#taskAddDialog #taskAddContent::placeholder,
+  dialog#taskEditDialog #taskEditTitle::placeholder,
+  dialog#taskEditDialog #taskEditContent::placeholder {
     color: #9aa0a6;
   }
-  dialog#catAddDialog #catAddInput:focus {
+  dialog#catAddDialog #catAddInput:focus,
+  dialog#taskAddDialog #taskAddTitle:focus,
+  dialog#taskAddDialog #taskAddContent:focus,
+  dialog#taskEditDialog #taskEditTitle:focus,
+  dialog#taskEditDialog #taskEditContent:focus {
     border-color: #60a5fa;
     box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
     background: #2f3236;
@@ -518,6 +596,50 @@ dialog#catAddDialog::backdrop {
     background: #5c6268;
   }
   .cat-item.dragging {
+    background: #313539;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
+  }
+}
+/* タスクアイテムのスタイル */
+.task-item {
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  touch-action: none;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.task-item .task-title {
+  flex: 1 1 auto;
+  margin-left: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.task-item .row-actions {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 4px;
+}
+.task-item.dragging {
+  opacity: 0.95;
+  transform: scale(1.02);
+  transition: transform 120ms ease-out;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  background: #fff;
+  border-radius: 6px;
+  cursor: grabbing;
+}
+
+@media (prefers-color-scheme: dark) {
+  .task-item {
+    border-bottom-color: #3a3d41;
+  }
+  .task-item.dragging {
     background: #313539;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
   }

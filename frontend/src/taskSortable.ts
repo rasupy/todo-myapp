@@ -1,12 +1,12 @@
-// カテゴリーの並べ替え
-import { reorderCategories } from "./api.js";
+// タスク並べ替え機能
+import { reorderTasks } from "./api.js";
 
-// ul 要素に対して sortable を設定する
-export function makeSortable(
+// ul 要素に対して sortable を設定する。
+export function makeTaskSortable(
   ul: HTMLUListElement,
+  categoryId: number,
   onReorder?: (orderedIds: number[]) => Promise<void>
 ) {
-  // すでに sortable 設定済みなら何もしない
   if ((ul as any).dataset.sortable === "1") return;
   (ul as any).dataset.sortable = "1";
 
@@ -14,10 +14,9 @@ export function makeSortable(
   let placeholder: HTMLElement | null = null;
   let startX = 0;
   let startY = 0;
-  let started = false; // 実ドラッグ開始済みか
+  let started = false;
   let rect: DOMRect | null = null;
-
-  const MOVE_THRESHOLD = 6; // この距離を超えたらドラッグ開始
+  const MOVE_THRESHOLD = 6;
 
   function cleanup(pu?: PointerEvent) {
     try {
@@ -58,7 +57,6 @@ export function makeSortable(
     started = true;
   }
 
-  // ドラッグ中の要素を移動させる
   const onPointerMove = (pm: PointerEvent) => {
     if (!dragEl) return;
     if (!started) {
@@ -66,9 +64,7 @@ export function makeSortable(
       const dy = pm.clientY - startY;
       if (Math.hypot(dx, dy) >= MOVE_THRESHOLD) {
         startDrag(dragEl as HTMLLIElement);
-      } else {
-        return;
-      }
+      } else return;
     }
     const r = rect as DOMRect;
     dragEl.style.left = `${pm.clientX - r.width / 2}px`;
@@ -84,7 +80,6 @@ export function makeSortable(
       if (started && placeholder && placeholder.parentElement) {
         placeholder.parentElement.insertBefore(dragEl as Node, placeholder);
       }
-      // 並べ替え送信（ドラッグ未開始なら送信しない）
       if (started) {
         const ordered: number[] = Array.from(
           ul.querySelectorAll("li:not(.placeholder)")
@@ -92,7 +87,7 @@ export function makeSortable(
           .map((el) => Number((el as HTMLElement).dataset.id))
           .filter(Boolean);
         if (onReorder) await onReorder(ordered);
-        else await reorderCategories(ordered);
+        else await reorderTasks(categoryId, ordered);
       }
     } catch (err) {
       alert("並び替えの保存に失敗しました");
@@ -105,11 +100,10 @@ export function makeSortable(
 
   ul.addEventListener("pointerdown", (e) => {
     const target = e.target as HTMLElement;
-    // ボタン上ではドラッグ開始させない (クリックイベント優先)
-    if (target.closest("button")) return;
+    if (target.closest("button")) return; // ボタン上はドラッグさせない
     const li = target.closest("li") as HTMLLIElement | null;
     if (!li) return;
-    if ((e as PointerEvent).button !== 0) return; // left only
+    if ((e as PointerEvent).button !== 0) return;
     const pid = (e as PointerEvent).pointerId;
     startX = (e as PointerEvent).clientX;
     startY = (e as PointerEvent).clientY;
@@ -123,7 +117,6 @@ export function makeSortable(
   });
 }
 
-// ドロップ位置を計算するヘルパー
 function getDragAfterElement(container: HTMLElement, y: number) {
   const draggableElements = Array.from(
     container.querySelectorAll("li:not(.dragging):not(.placeholder)")
