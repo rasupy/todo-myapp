@@ -1,4 +1,4 @@
-// アーカイブ一覧の表示・復元/削除UI
+// アーカイブ一覧の表示
 import type { Task } from "./api.js";
 import { getTemplate } from "./templates.js";
 
