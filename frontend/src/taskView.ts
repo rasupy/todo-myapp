@@ -4,12 +4,14 @@ import { getTemplate } from "./templates.js";
 
 export type OnEditOpen = (task: Task) => void;
 export type OnDeleteTask = (taskId: number) => void;
+export type OnArchiveTask = (taskId: number) => void;
 
 export function renderTaskList(
   container: HTMLElement,
   tasks: Task[],
   onOpenEdit: OnEditOpen,
-  onDelete?: OnDeleteTask
+  onDelete?: OnDeleteTask,
+  onArchive?: OnArchiveTask
 ): HTMLUListElement | null {
   container.innerHTML = "";
   if (tasks.length === 0) {
@@ -44,6 +46,10 @@ export function renderTaskList(
     if (!li) return;
     const id = Number(li.dataset.id);
     if (!id) return;
+    if (target.closest(".row-action-archive")) {
+      onArchive?.(id);
+      return;
+    }
     if (target.closest(".row-action-edit")) {
       const task = tasks.find((x) => x.id === id);
       if (task) onOpenEdit(task);
