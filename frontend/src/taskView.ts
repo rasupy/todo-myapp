@@ -1,5 +1,6 @@
 // タスク一覧の表示・編集UI
 import type { Task } from "./api.js";
+import { getTemplate } from "./templates.js";
 
 export type OnEditOpen = (task: Task) => void;
 export type OnDeleteTask = (taskId: number) => void;
@@ -25,35 +26,15 @@ export function renderTaskList(
   }
 
   const ul = document.createElement("ul");
+  const itemTpl = getTemplate("tmpl-task-item");
   tasks.forEach((t) => {
-    const li = document.createElement("li");
-    li.className = "task-item";
+    const node = itemTpl.content.firstElementChild!.cloneNode(
+      true
+    ) as HTMLElement;
+    const li = node as HTMLLIElement;
     li.dataset.id = String(t.id);
-
-    const title = document.createElement("span");
-    title.className = "task-title";
-    title.textContent = t.title;
-
-    const actions = document.createElement("span");
-    actions.className = "row-actions";
-
-    const addEditBtn = document.createElement("button");
-    addEditBtn.className = "row-action row-action-edit icon-btn-sm";
-    addEditBtn.title = "Edit";
-    addEditBtn.innerHTML =
-      '<span class="material-symbols-outlined">edit</span>';
-
-    const delBtn = document.createElement("button");
-    delBtn.className = "row-action row-action-del icon-btn-sm";
-    delBtn.title = "Delete";
-    delBtn.setAttribute("aria-label", "Delete task");
-    delBtn.innerHTML =
-      '<span class="material-symbols-outlined" aria-hidden="true">delete</span>';
-
-    actions.appendChild(addEditBtn);
-    actions.appendChild(delBtn);
-    li.appendChild(title);
-    li.appendChild(actions);
+    const title = li.querySelector(".task-title") as HTMLElement | null;
+    if (title) title.textContent = t.title;
     ul.appendChild(li);
   });
 
