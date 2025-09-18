@@ -62,6 +62,19 @@ export async function fetchTasks(
   return data.map(mapTaskServer);
 }
 
+// アーカイブ済みタスク一覧を取得（カテゴリ内）
+export async function fetchArchivedTasks(
+  categoryId: number,
+  userId = 1
+): Promise<Task[]> {
+  const res = await fetch(
+    `${BASE}/api/tasks?user_id=${userId}&category_id=${categoryId}&status=archived`
+  );
+  if (!res.ok) throw new Error("Failed to fetch archived tasks");
+  const data = await res.json();
+  return data.map(mapTaskServer);
+}
+
 // カテゴリーを追加
 export async function addCategory(
   title: string,
@@ -129,6 +142,16 @@ export async function updateTask(
   if (!res.ok) throw new Error("Failed to update task");
   const data = await res.json();
   return mapTaskServer(data);
+}
+
+// タスクをアーカイブに移動（status=archived）
+export async function archiveTask(id: number, userId = 1): Promise<Task> {
+  return updateTask(id, { status: "archived" }, userId);
+}
+
+// アーカイブからタスクに戻す（status=todo）
+export async function restoreTask(id: number, userId = 1): Promise<Task> {
+  return updateTask(id, { status: "todo" }, userId);
 }
 
 // カテゴリーの並べ替え
