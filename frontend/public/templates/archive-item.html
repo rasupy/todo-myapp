@@ -1,0 +1,24 @@
+<!-- アーカイブアイテムのテンプレート -->
+<template id="tmpl-archive-item">
+  <li class="archive-item task-item" data-id="">
+    <span class="task-title"></span>
+    <span class="row-actions">
+      <button
+        class="row-action row-action-restore icon-btn-sm"
+        title="Restore to Task"
+        aria-label="Restore to Task"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true"
+          >chevron_left</span
+        >
+      </button>
+      <button
+        class="row-action row-action-del icon-btn-sm"
+        title="Delete"
+        aria-label="Delete archive"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">delete</span>
+      </button>
+    </span>
+  </li>
+</template>

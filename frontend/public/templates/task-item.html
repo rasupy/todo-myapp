@@ -1,0 +1,31 @@
+<!-- タスクアイテムのテンプレート -->
+<template id="tmpl-task-item">
+  <li class="task-item" data-id="">
+    <span class="task-title"></span>
+    <span class="row-actions">
+      <button
+        class="row-action row-action-archive icon-btn-sm"
+        title="Archive"
+        aria-label="Archive task"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true"
+          >chevron_right</span
+        >
+      </button>
+      <button
+        class="row-action row-action-edit icon-btn-sm"
+        title="Edit"
+        aria-label="Edit task"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">edit</span>
+      </button>
+      <button
+        class="row-action row-action-del icon-btn-sm"
+        title="Delete"
+        aria-label="Delete task"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">delete</span>
+      </button>
+    </span>
+  </li>
+</template>

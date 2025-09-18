@@ -1,7 +1,6 @@
-// カテゴリ一覧の取得、表示、編集、追加、削除
-// タスク一覧の取得、表示、編集、追加、削除
-// カテゴリ並べ替え
-// タスク並べ替え
+// カテゴリ一覧の取得、表示、編集、追加、削除、並べ替え
+// タスク一覧の取得、表示、編集、追加、削除、並べ替え
+// アーカイブ済タスクの表示、復元、削除
 // それぞれのAPI呼び出し
 import {
   fetchCategories,
@@ -10,26 +9,37 @@ import {
   fetchTasks,
   type Task,
   reorderTasks,
+  fetchArchivedTasks,
+  archiveTask,
+  restoreTask,
 } from "./api.js";
 import { initCategoryAdd } from "./categoryAdd.js";
 
 import { renderCategoryList } from "./categoryView.js";
 import { makeSortable } from "./categorySortable.js";
 import { removeTask } from "./taskDel.js";
+import { removeArchive } from "./archiveDel.js";
 import { makeTaskSortable } from "./taskSortable.js";
+import { makeArchiveSortable } from "./archiveSortable.js";
 import { removeCategory } from "./categoryDel.js";
 import { renderTaskList } from "./taskView.js";
+import { renderArchiveList } from "./archiveView.js";
 import { initTaskAdd, openTaskAddDialog } from "./taskAdd.js";
 import { initTaskEdit, openTaskEditDialog } from "./taskEdit.js";
+import { loadTemplates } from "./templates.js";
 
 async function init() {
+  // UIテンプレートを読み込み
+  await loadTemplates();
   // DOM要素の取得
   const listContainer = document.querySelector("#categories") as HTMLElement;
   const taskContainer = document.querySelector("#tasks") as HTMLElement;
+  const archiveContainer = document.querySelector("#archive") as HTMLElement;
 
   // 初期データ取得
   let categories: Category[] = [];
   let tasks: Task[] = [];
+  let archived: Task[] = [];
   let activeCategory: Category | null = null;
   try {
     categories = await fetchCategories();
@@ -37,10 +47,27 @@ async function init() {
     listContainer.textContent = String(err);
   }
 
-  // 再描画
+  // UIユーティリティ
+  const setLoading = (el: HTMLElement, on: boolean) => {
+    if (on) el.dataset.loading = "1";
+    else delete el.dataset.loading;
+  };
+
+  // 再描画（カテゴリリスト）
   async function reload() {
     categories = await fetchCategories();
     render();
+  }
+
+  // タスク/アーカイブの取得と両パネル再描画
+  async function refreshTaskBoards() {
+    if (!activeCategory) return;
+    [tasks, archived] = await Promise.all([
+      fetchTasks(activeCategory.id),
+      fetchArchivedTasks(activeCategory.id),
+    ]);
+    renderTasksUI();
+    renderArchiveUI();
   }
 
   // カテゴリーリスト描画
@@ -64,12 +91,11 @@ async function init() {
       await updateCategory(id, title);
       await reload();
     } catch (e) {
-      alert("更新に失敗しました");
+      alert("Update failed");
     }
   }
 
   render();
-
   // カテゴリ追加機能初期化（追加後に再読込）
   initCategoryAdd({ onAdded: reload });
 
@@ -95,8 +121,7 @@ async function init() {
 
   async function onSelectCategory(cat: Category) {
     activeCategory = cat;
-    tasks = await fetchTasks(cat.id);
-    renderTasksUI();
+    await refreshTaskBoards();
   }
 
   function onOpenTaskAdd(cat: Category) {
@@ -114,15 +139,20 @@ async function init() {
       async (taskId: number) => {
         try {
           const ok = await removeTask(taskId, {
-            before: () => (taskContainer.dataset.loading = "1"),
-            after: () => delete taskContainer.dataset.loading,
+            before: () => setLoading(taskContainer, true),
+            after: () => setLoading(taskContainer, false),
           });
-          if (ok && activeCategory) {
-            tasks = await fetchTasks(activeCategory.id);
-            renderTasksUI();
-          }
+          if (ok && activeCategory) await refreshTaskBoards();
         } catch (e) {
-          alert("タスクの削除に失敗しました");
+          alert("Delete failed");
+        }
+      },
+      async (taskId: number) => {
+        try {
+          await archiveTask(taskId);
+          if (activeCategory) await refreshTaskBoards();
+        } catch (e) {
+          alert("Archive failed");
         }
       }
     );
@@ -130,6 +160,41 @@ async function init() {
       makeTaskSortable(ul, activeCategory.id, async (orderedIds: number[]) => {
         await reorderTasks(activeCategory.id, orderedIds);
       });
+    }
+  }
+
+  function renderArchiveUI() {
+    const ul = renderArchiveList(
+      archiveContainer,
+      archived,
+      async (taskId: number) => {
+        try {
+          await restoreTask(taskId);
+          if (activeCategory) await refreshTaskBoards();
+        } catch (e) {
+          alert("Restore failed");
+        }
+      },
+      async (taskId: number) => {
+        try {
+          const ok = await removeArchive(taskId, {
+            before: () => setLoading(archiveContainer, true),
+            after: () => setLoading(archiveContainer, false),
+          });
+          if (ok && activeCategory) await refreshTaskBoards();
+        } catch (e) {
+          alert("Archive deletion failed");
+        }
+      }
+    );
+    if (ul && (ul as any).dataset.sortable !== "1" && activeCategory) {
+      makeArchiveSortable(
+        ul,
+        activeCategory.id,
+        async (orderedIds: number[]) => {
+          await reorderTasks(activeCategory.id, orderedIds);
+        }
+      );
     }
   }
 
@@ -146,11 +211,9 @@ async function init() {
       });
       if (ok) await reload();
     } catch (e) {
-      alert("削除に失敗しました");
+      alert("Delete failed");
     }
   }
 }
 // 初期化実行
 init();
-
-// 以下、関数スコープ外定義は避け、init内にヘルパーを追加

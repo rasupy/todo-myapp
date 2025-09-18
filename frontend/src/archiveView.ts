@@ -1,17 +1,15 @@
-// タスク一覧の表示・編集UI
+// アーカイブ一覧の表示
 import type { Task } from "./api.js";
 import { getTemplate } from "./templates.js";
 
-export type OnEditOpen = (task: Task) => void;
+export type OnRestoreTask = (taskId: number) => void;
 export type OnDeleteTask = (taskId: number) => void;
-export type OnArchiveTask = (taskId: number) => void;
 
-export function renderTaskList(
+export function renderArchiveList(
   container: HTMLElement,
   tasks: Task[],
-  onOpenEdit: OnEditOpen,
-  onDelete?: OnDeleteTask,
-  onArchive?: OnArchiveTask
+  onRestore?: OnRestoreTask,
+  onDelete?: OnDeleteTask
 ): HTMLUListElement | null {
   container.innerHTML = "";
   if (tasks.length === 0) {
@@ -19,7 +17,7 @@ export function renderTaskList(
     container.classList.add("placeholder-panel");
     const p = document.createElement("p");
     p.className = "placeholder-msg";
-    p.textContent = "No tasks";
+    p.textContent = "No archives";
     container.appendChild(p);
     return null;
   } else {
@@ -28,7 +26,7 @@ export function renderTaskList(
   }
 
   const ul = document.createElement("ul");
-  const itemTpl = getTemplate("tmpl-task-item");
+  const itemTpl = getTemplate("tmpl-archive-item");
   tasks.forEach((t) => {
     const node = itemTpl.content.firstElementChild!.cloneNode(
       true
@@ -42,21 +40,16 @@ export function renderTaskList(
 
   ul.addEventListener("click", (e) => {
     const target = e.target as HTMLElement;
-    const li = target.closest("li.task-item") as HTMLElement | null;
+    const li = target.closest("li.archive-item") as HTMLElement | null;
     if (!li) return;
     const id = Number(li.dataset.id);
     if (!id) return;
-    if (target.closest(".row-action-archive")) {
-      onArchive?.(id);
-      return;
-    }
-    if (target.closest(".row-action-edit")) {
-      const task = tasks.find((x) => x.id === id);
-      if (task) onOpenEdit(task);
+    if (target.closest(".row-action-restore")) {
+      onRestore?.(id);
       return;
     }
     if (target.closest(".row-action-del")) {
-      if (confirm("Are you sure you want to delete this task?")) {
+      if (confirm("Are you sure you want to delete this archived task?")) {
         onDelete?.(id);
       }
       return;

@@ -1,5 +1,6 @@
 // カテゴリー一覧を表示する機能
 import { Category } from "./api.js";
+import { getTemplate } from "./templates.js";
 
 export type OnEdit = (id: number, title: string) => void;
 export type OnDelete = (id: number) => void;
@@ -32,46 +33,15 @@ export function renderCategoryList(
   const ul = document.createElement("ul");
 
   // アイテムDOM構築
+  const itemTpl = getTemplate("tmpl-category-item");
   categories.forEach((cat) => {
-    const li = document.createElement("li");
-    li.className = "cat-item";
+    const node = itemTpl.content.firstElementChild!.cloneNode(
+      true
+    ) as HTMLElement;
+    const li = node as HTMLLIElement;
     li.dataset.id = String(cat.id);
-
-    const span = document.createElement("span");
-    span.className = "title";
-    span.textContent = cat.title;
-    span.setAttribute("role", "textbox");
-    span.setAttribute("aria-readonly", "true");
-
-    const actionsWrap = document.createElement("span");
-    actionsWrap.className = "row-actions";
-
-    const addTaskBtn = document.createElement("button");
-    addTaskBtn.className = "row-action row-action-add icon-btn-sm";
-    addTaskBtn.title = "Add task";
-    addTaskBtn.setAttribute("aria-label", "Add task to category");
-    addTaskBtn.innerHTML =
-      '<span class="material-symbols-outlined" aria-hidden="true">add</span>';
-
-    const editBtn = document.createElement("button");
-    editBtn.className = "row-action row-action-edit icon-btn-sm";
-    editBtn.title = "Edit";
-    editBtn.setAttribute("aria-label", "Edit category");
-    editBtn.innerHTML =
-      '<span class="material-symbols-outlined" aria-hidden="true">edit</span>';
-
-    const delBtn = document.createElement("button");
-    delBtn.className = "row-action row-action-del icon-btn-sm";
-    delBtn.title = "Delete";
-    delBtn.setAttribute("aria-label", "Delete category");
-    delBtn.innerHTML =
-      '<span class="material-symbols-outlined" aria-hidden="true">delete</span>';
-
-    actionsWrap.appendChild(addTaskBtn);
-    actionsWrap.appendChild(editBtn);
-    actionsWrap.appendChild(delBtn);
-    li.appendChild(span);
-    li.appendChild(actionsWrap);
+    const title = li.querySelector(".title") as HTMLElement | null;
+    if (title) title.textContent = cat.title;
     ul.appendChild(li);
   });
 

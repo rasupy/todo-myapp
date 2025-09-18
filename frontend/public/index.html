@@ -6,7 +6,7 @@
     <title>Todo-App</title>
     <!-- メインスタイル (VSCode Sass 拡張出力) -->
     <link rel="stylesheet" href="/scss/styles.css" />
-    <!-- Material Symbols (Outlined) font loading optimization -->
+    <!-- GoogleFonts Icon -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -70,66 +70,7 @@
       </div>
       <pre id="result"></pre>
     </div>
-    <!-- Category Add modal -->
-    <dialog id="catAddDialog">
-      <form method="dialog" id="catAddForm">
-        <h3>Add-Category</h3>
-        <label>
-          <input
-            name="title"
-            id="catAddInput"
-            autofocus
-            required
-            placeholder="please enter category name."
-          />
-        </label>
-        <div class="dlg-actions">
-          <button value="submit" type="submit" id="catAddSubmit">Add</button>
-          <button value="cancel" type="button" id="catAddCancel">Cancel</button>
-        </div>
-      </form>
-    </dialog>
-    <!-- Task Add modal -->
-    <dialog id="taskAddDialog">
-      <form method="dialog" id="taskAddForm">
-        <h3>Add-Task</h3>
-        <label>
-          <div class="label">Task Title:</div>
-          <input name="title" id="taskAddTitle" required />
-        </label>
-        <label>
-          <div class="label">Task Content:</div>
-          <textarea name="content" id="taskAddContent" rows="5"></textarea>
-        </label>
-        <div class="dlg-actions">
-          <button value="submit" type="submit" id="taskAddSubmit">Add</button>
-          <button value="cancel" type="button" id="taskAddCancel">
-            Cancel
-          </button>
-        </div>
-      </form>
-    </dialog>
-
-    <!-- Task Edit modal -->
-    <dialog id="taskEditDialog">
-      <form method="dialog" id="taskEditForm">
-        <h3>Edit-Task</h3>
-        <label>
-          <div class="label">Task Title:</div>
-          <input name="title" id="taskEditTitle" required />
-        </label>
-        <label>
-          <div class="label">Task Content:</div>
-          <textarea name="content" id="taskEditContent" rows="5"></textarea>
-        </label>
-        <div class="dlg-actions">
-          <button value="submit" type="submit" id="taskEditSubmit">Save</button>
-          <button value="cancel" type="button" id="taskEditCancel">
-            Cancel
-          </button>
-        </div>
-      </form>
-    </dialog>
+    <!-- テンプレート -->
     <script type="module" src="/main.js?v=0.1.0"></script>
   </body>
 </html>
