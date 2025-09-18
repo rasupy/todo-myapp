@@ -1,0 +1,20 @@
+<!-- タスク編集モーダルのテンプレート -->
+<template id="tmpl-modal-task-edit">
+  <dialog id="taskEditDialog">
+    <form method="dialog" id="taskEditForm">
+      <h3>Edit-Task</h3>
+      <label>
+        <div class="label">Task Title:</div>
+        <input name="title" id="taskEditTitle" required />
+      </label>
+      <label>
+        <div class="label">Task Content:</div>
+        <textarea name="content" id="taskEditContent" rows="5"></textarea>
+      </label>
+      <div class="dlg-actions">
+        <button value="submit" type="submit" id="taskEditSubmit">Save</button>
+        <button value="cancel" type="button" id="taskEditCancel">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+</template>
