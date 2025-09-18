@@ -1,0 +1,20 @@
+<!-- タスク追加モーダルのテンプレート -->
+<template id="tmpl-modal-task-add">
+  <dialog id="taskAddDialog">
+    <form method="dialog" id="taskAddForm">
+      <h3>Add-Task</h3>
+      <label>
+        <div class="label">Task Title:</div>
+        <input name="title" id="taskAddTitle" required />
+      </label>
+      <label>
+        <div class="label">Task Content:</div>
+        <textarea name="content" id="taskAddContent" rows="5"></textarea>
+      </label>
+      <div class="dlg-actions">
+        <button value="submit" type="submit" id="taskAddSubmit">Add</button>
+        <button value="cancel" type="button" id="taskAddCancel">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+</template>
