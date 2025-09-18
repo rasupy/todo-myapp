@@ -1,0 +1,29 @@
+<!-- カテゴリアイテムのテンプレート -->
+<template id="tmpl-category-item">
+  <li class="cat-item" data-id="">
+    <span class="title" role="textbox" aria-readonly="true"></span>
+    <span class="row-actions">
+      <button
+        class="row-action row-action-add icon-btn-sm"
+        title="Add task"
+        aria-label="Add task to category"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">add</span>
+      </button>
+      <button
+        class="row-action row-action-edit icon-btn-sm"
+        title="Edit"
+        aria-label="Edit category"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">edit</span>
+      </button>
+      <button
+        class="row-action row-action-del icon-btn-sm"
+        title="Delete"
+        aria-label="Delete category"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">delete</span>
+      </button>
+    </span>
+  </li>
+</template>
