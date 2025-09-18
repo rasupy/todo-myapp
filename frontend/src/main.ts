@@ -18,7 +18,9 @@ import { initCategoryAdd } from "./categoryAdd.js";
 import { renderCategoryList } from "./categoryView.js";
 import { makeSortable } from "./categorySortable.js";
 import { removeTask } from "./taskDel.js";
+import { removeArchive } from "./archiveDel.js";
 import { makeTaskSortable } from "./taskSortable.js";
+import { makeArchiveSortable } from "./archiveSortable.js";
 import { removeCategory } from "./categoryDel.js";
 import { renderTaskList } from "./taskView.js";
 import { renderArchiveList } from "./archiveView.js";
@@ -175,7 +177,7 @@ async function init() {
       },
       async (taskId: number) => {
         try {
-          const ok = await removeTask(taskId, {
+          const ok = await removeArchive(taskId, {
             before: () => setLoading(archiveContainer, true),
             after: () => setLoading(archiveContainer, false),
           });
@@ -186,9 +188,13 @@ async function init() {
       }
     );
     if (ul && (ul as any).dataset.sortable !== "1" && activeCategory) {
-      makeTaskSortable(ul, activeCategory.id, async (orderedIds: number[]) => {
-        await reorderTasks(activeCategory.id, orderedIds);
-      });
+      makeArchiveSortable(
+        ul,
+        activeCategory.id,
+        async (orderedIds: number[]) => {
+          await reorderTasks(activeCategory.id, orderedIds);
+        }
+      );
     }
   }
 
