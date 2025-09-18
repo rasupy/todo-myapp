@@ -2,6 +2,7 @@
 const TEMPLATE_FILES = [
   "/templates/category-item.html",
   "/templates/task-item.html",
+  "/templates/archive-item.html",
   "/templates/modal-category-add.html",
   "/templates/modal-task-add.html",
   "/templates/modal-task-edit.html",
@@ -30,7 +31,7 @@ export async function loadTemplates() {
   const mount = document.createDocumentFragment();
   frags.forEach((t) => mount.appendChild(t));
   document.body.appendChild(mount);
-  // モーダルテンプレートは実体も配置しておく（ID参照で既存コードが動くように）
+  // モーダルテンプレートは実体を配置
   frags
     .filter((t) => t.id.startsWith("tmpl-modal-"))
     .forEach((t) => {
