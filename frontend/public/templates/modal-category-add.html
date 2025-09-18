@@ -1,0 +1,21 @@
+<!-- カテゴリ追加モーダルのテンプレート -->
+<template id="tmpl-modal-category-add">
+  <dialog id="catAddDialog">
+    <form method="dialog" id="catAddForm">
+      <h3>Add-Category</h3>
+      <label>
+        <input
+          name="title"
+          id="catAddInput"
+          autofocus
+          required
+          placeholder="please enter category name."
+        />
+      </label>
+      <div class="dlg-actions">
+        <button value="submit" type="submit" id="catAddSubmit">Add</button>
+        <button value="cancel" type="button" id="catAddCancel">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+</template>
