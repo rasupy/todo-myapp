@@ -21,8 +21,11 @@ import { removeCategory } from "./categoryDel.js";
 import { renderTaskList } from "./taskView.js";
 import { initTaskAdd, openTaskAddDialog } from "./taskAdd.js";
 import { initTaskEdit, openTaskEditDialog } from "./taskEdit.js";
+import { loadTemplates } from "./templates.js";
 
 async function init() {
+  // UIテンプレートを読み込み
+  await loadTemplates();
   // DOM要素の取得
   const listContainer = document.querySelector("#categories") as HTMLElement;
   const taskContainer = document.querySelector("#tasks") as HTMLElement;
@@ -152,5 +155,3 @@ async function init() {
 }
 // 初期化実行
 init();
-
-// 以下、関数スコープ外定義は避け、init内にヘルパーを追加
