@@ -13,27 +13,37 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
     />
-    <style>
-      .material-symbols-outlined {
-        font-family: "Material Symbols Outlined", sans-serif;
-        font-weight: 400;
-        font-style: normal;
-        font-size: 24px; /* fallback size */
-        display: inline-block;
-        line-height: 1;
-        text-transform: none;
-        letter-spacing: normal;
-        -webkit-font-smoothing: antialiased;
-        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
-      }
-    </style>
   </head>
   <body>
     <div id="app">
       <header>
-        <h1>Todo Board</h1>
+        <div class="header-actions">
+          <h1 id="appTitle">Todo Bord</h1>
+          <button
+            id="btnLogout"
+            class="icon-ghost"
+            title="Logout"
+            aria-label="Logout"
+            style="display: none"
+          >
+            <span class="material-symbols-outlined" aria-hidden="true"
+              >logout</span
+            >
+          </button>
+          <div id="authBoard" class="auth-board" style="display: none">
+            <div
+              class="board"
+              id="authBoards"
+              style="max-width: 560px; width: 100%"
+            ></div>
+            <p
+              id="authError"
+              style="color: #b00; display: none; max-width: 560px"
+            ></p>
+          </div>
+        </div>
       </header>
-      <div class="board">
+      <div id="mainBoard" class="board three-cols">
         <!-- Categories -->
         <section class="col col-category">
           <h2 class="col-title" id="categoryHeader">
@@ -69,8 +79,12 @@
         </section>
       </div>
       <pre id="result"></pre>
+      <footer id="appFooter" aria-label="Footer">
+        <small>&copy; 2025 Todo App</small>
+      </footer>
     </div>
     <!-- テンプレート -->
     <script type="module" src="/main.js?v=0.1.0"></script>
+    <script type="module" src="/session.js?v=0.1.0"></script>
   </body>
 </html>
