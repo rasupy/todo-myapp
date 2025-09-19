@@ -19,6 +19,12 @@ export type Task = {
 };
 
 const BASE = "";
+// 認証ユーザーIDの共通取得
+function currentUserId(): number {
+  const v = localStorage.getItem("user_id");
+  if (!v) throw new Error("Not authenticated");
+  return Number(v);
+}
 
 function mapServer(c: any): Category {
   return {
@@ -42,8 +48,9 @@ function mapTaskServer(t: any): Task {
 }
 
 // カテゴリー一覧を取得
-export async function fetchCategories(userId = 1): Promise<Category[]> {
-  const res = await fetch(`${BASE}/api/categories?user_id=${userId}`);
+export async function fetchCategories(userId?: number): Promise<Category[]> {
+  const uid = userId ?? currentUserId();
+  const res = await fetch(`${BASE}/api/categories?user_id=${uid}`);
   if (!res.ok) throw new Error("Failed to fetch categories");
   const data = await res.json();
   return data.map(mapServer);
@@ -52,10 +59,11 @@ export async function fetchCategories(userId = 1): Promise<Category[]> {
 // タスク一覧を取得（カテゴリ内）
 export async function fetchTasks(
   categoryId: number,
-  userId = 1
+  userId?: number
 ): Promise<Task[]> {
+  const uid = userId ?? currentUserId();
   const res = await fetch(
-    `${BASE}/api/tasks?user_id=${userId}&category_id=${categoryId}`
+    `${BASE}/api/tasks?user_id=${uid}&category_id=${categoryId}`
   );
   if (!res.ok) throw new Error("Failed to fetch tasks");
   const data = await res.json();
@@ -65,10 +73,11 @@ export async function fetchTasks(
 // アーカイブ済みタスク一覧を取得（カテゴリ内）
 export async function fetchArchivedTasks(
   categoryId: number,
-  userId = 1
+  userId?: number
 ): Promise<Task[]> {
+  const uid = userId ?? currentUserId();
   const res = await fetch(
-    `${BASE}/api/tasks?user_id=${userId}&category_id=${categoryId}&status=archived`
+    `${BASE}/api/tasks?user_id=${uid}&category_id=${categoryId}&status=archived`
   );
   if (!res.ok) throw new Error("Failed to fetch archived tasks");
   const data = await res.json();
@@ -78,12 +87,13 @@ export async function fetchArchivedTasks(
 // カテゴリーを追加
 export async function addCategory(
   title: string,
-  userId = 1
+  userId?: number
 ): Promise<Category> {
+  const uid = userId ?? currentUserId();
   const res = await fetch(`${BASE}/api/category`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title, user_id: userId }),
+    body: JSON.stringify({ title, user_id: uid }),
   });
   if (!res.ok) throw new Error("Failed to add category");
   const data = await res.json();
@@ -95,15 +105,16 @@ export async function addTask(
   categoryId: number,
   title: string,
   content = "",
-  userId = 1
+  userId?: number
 ): Promise<Task> {
+  const uid = userId ?? currentUserId();
   const res = await fetch(`${BASE}/api/task`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       title,
       content,
-      user_id: userId,
+      user_id: uid,
       category_id: categoryId,
     }),
   });
@@ -116,12 +127,13 @@ export async function addTask(
 export async function updateCategory(
   id: number,
   title: string,
-  userId = 1
+  userId?: number
 ): Promise<Category> {
+  const uid = userId ?? currentUserId();
   const res = await fetch(`${BASE}/api/category/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title, user_id: userId }),
+    body: JSON.stringify({ title, user_id: uid }),
   });
   if (!res.ok) throw new Error("Failed to update category");
   const data = await res.json();
@@ -132,12 +144,13 @@ export async function updateCategory(
 export async function updateTask(
   id: number,
   patch: Partial<Pick<Task, "title" | "content" | "status">>,
-  userId = 1
+  userId?: number
 ): Promise<Task> {
+  const uid = userId ?? currentUserId();
   const res = await fetch(`${BASE}/api/task/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...patch, user_id: userId }),
+    body: JSON.stringify({ ...patch, user_id: uid }),
   });
   if (!res.ok) throw new Error("Failed to update task");
   const data = await res.json();
@@ -145,24 +158,25 @@ export async function updateTask(
 }
 
 // タスクをアーカイブに移動（status=archived）
-export async function archiveTask(id: number, userId = 1): Promise<Task> {
+export async function archiveTask(id: number, userId?: number): Promise<Task> {
   return updateTask(id, { status: "archived" }, userId);
 }
 
 // アーカイブからタスクに戻す（status=todo）
-export async function restoreTask(id: number, userId = 1): Promise<Task> {
+export async function restoreTask(id: number, userId?: number): Promise<Task> {
   return updateTask(id, { status: "todo" }, userId);
 }
 
 // カテゴリーの並べ替え
 export async function reorderCategories(
   orderedIds: number[],
-  userId = 1
+  userId?: number
 ): Promise<number> {
+  const uid = userId ?? currentUserId();
   const res = await fetch(`${BASE}/api/categories/reorder`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ user_id: userId, ordered_ids: orderedIds }),
+    body: JSON.stringify({ user_id: uid, ordered_ids: orderedIds }),
   });
   if (!res.ok) throw new Error("Failed to reorder categories");
   const data = await res.json();
@@ -173,13 +187,14 @@ export async function reorderCategories(
 export async function reorderTasks(
   categoryId: number,
   orderedIds: number[],
-  userId = 1
+  userId?: number
 ): Promise<number> {
+  const uid = userId ?? currentUserId();
   const res = await fetch(`${BASE}/api/tasks/reorder`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      user_id: userId,
+      user_id: uid,
       category_id: categoryId,
       ordered_ids: orderedIds,
     }),
@@ -192,9 +207,10 @@ export async function reorderTasks(
 // カテゴリーを削除
 export async function deleteCategory(
   id: number,
-  userId = 1
+  userId?: number
 ): Promise<{ deleted: boolean }> {
-  const res = await fetch(`${BASE}/api/category/${id}?user_id=${userId}`, {
+  const uid = userId ?? currentUserId();
+  const res = await fetch(`${BASE}/api/category/${id}?user_id=${uid}`, {
     method: "DELETE",
   });
   if (!res.ok) throw new Error("Failed to delete category");
@@ -204,9 +220,10 @@ export async function deleteCategory(
 // タスクを削除
 export async function deleteTask(
   id: number,
-  userId = 1
+  userId?: number
 ): Promise<{ deleted: boolean }> {
-  const res = await fetch(`${BASE}/api/task/${id}?user_id=${userId}`, {
+  const uid = userId ?? currentUserId();
+  const res = await fetch(`${BASE}/api/task/${id}?user_id=${uid}`, {
     method: "DELETE",
   });
   if (!res.ok) throw new Error("Failed to delete task");
