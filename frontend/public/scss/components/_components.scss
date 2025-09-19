@@ -147,6 +147,34 @@
     outline-offset: 1px;
   }
 }
+
+/* 枠・背景なしのアイコンボタン */
+.icon-ghost {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  color: inherit;
+}
+.icon-ghost .material-symbols-outlined {
+  font-size: 24px;
+}
+.icon-ghost:hover {
+  background: transparent;
+  color: $color-accent;
+}
+.icon-ghost:active {
+  background: transparent;
+  color: $color-accent-active;
+}
+.icon-ghost:focus-visible {
+  outline: 2px solid $color-accent;
+  outline-offset: 2px;
+}
 .txt-btn {
   background: transparent;
   border: none;
@@ -165,6 +193,66 @@
   &:focus-visible {
     outline: 2px solid #3b82f6;
     outline-offset: 2px;
+  }
+}
+
+/* Auth forms */
+.form-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.form-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.form-actions.between {
+  justify-content: space-between;
+}
+
+.panel.panel-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 共通フォーム入力スタイル（メインページ準拠） */
+.form-control {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  font-size: 15px;
+  line-height: 1.4;
+  border: 1px solid #d0d5da;
+  border-radius: $radius-md;
+  background: #fff;
+  color: $color-text;
+  transition: border-color $transition-fast, box-shadow $transition-fast,
+    background $transition-fast;
+  &::placeholder {
+    color: #8a8f96;
+  }
+  &:focus {
+    outline: none;
+    border-color: $color-accent;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+    background: #ffffff;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .form-control {
+    background: $color-surface-dark;
+    border-color: #50555c;
+    color: #e4e6eb;
+    &::placeholder {
+      color: #9aa0a6;
+    }
+    &:focus {
+      border-color: $color-accent-dark;
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+      background: #2f3236;
+    }
   }
 }
 .cat-item.editing .row-action-edit,

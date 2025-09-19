@@ -3,6 +3,14 @@
 header {
   max-width: $layout-max-width;
   margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.header-actions {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 8px;
 }
 .board {
   display: flex;
@@ -10,10 +18,21 @@ header {
   align-items: stretch;
   max-width: $layout-max-width;
   margin: 0 auto;
-  overflow-x: auto;
+  overflow: hidden; // スクロール無効化
   padding-bottom: 4px;
   flex: 1 1 auto;
   min-height: 0;
+}
+/* ページ残り高いっぱいにボードを広げる */
+#mainBoard.board {
+  height: calc(100vh - 80px - 40px); // ヘッダーとフッター分を差し引き
+}
+.board.three-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr; // 高さをコンテナ一杯に
+  gap: 16px;
+  align-items: stretch; // カラムを縦方向にストレッチ
 }
 .board > .col {
   flex: 1 1 0;
@@ -34,12 +53,22 @@ header {
   border-radius: $radius-lg;
   padding: 12px 12px 16px;
   min-height: 0;
+  height: 100%; // 親グリッドの行高にフィット
   box-shadow: $shadow-sm;
   position: relative;
   transition: box-shadow $transition-med ease;
   &:hover {
     box-shadow: $shadow-hover;
   }
+}
+
+/* Auth board center */
+.auth-board {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
 }
 .col-title {
   margin: 0 0 12px;
@@ -59,7 +88,7 @@ header {
 }
 .list-panel {
   flex: 1 1 auto;
-  overflow-y: auto;
+  overflow: hidden; // スクロール無効化
   min-height: 0;
 }
 .list-panel ul {

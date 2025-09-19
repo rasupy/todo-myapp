@@ -8,6 +8,26 @@ body {
   display: flex;
   flex-direction: column;
   background: $color-bg-light;
+  overflow: hidden; // ページスクロールを無効化
+}
+
+/* Google Icons*/
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 24px; /* fallback size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+/* クリック可能なタイトル */
+#appTitle {
+  cursor: pointer;
 }
 #app {
   min-height: 100vh;
@@ -20,6 +40,13 @@ body {
 #app > .board {
   flex: 1 1 auto;
   min-height: 0;
+}
+#app > footer#appFooter {
+  flex: 0 0 40px; // フッターの高さを確保
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #777;
 }
 input {
   margin-right: 8px;
@@ -34,7 +61,7 @@ pre {
 @media (prefers-color-scheme: dark) {
   body {
     background: $color-bg-dark;
-    color: #e4e6eb;
+    color: $color-text-dark;
   }
   pre {
     background: $color-surface-dark;
