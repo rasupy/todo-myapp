@@ -17,7 +17,7 @@ export async function removeTask(
   inFlight.add(id);
   opts.before?.(id);
   try {
-    await deleteTask(id, opts.userId ?? 1);
+    await deleteTask(id, opts.userId ?? undefined);
     return true;
   } finally {
     inFlight.delete(id);

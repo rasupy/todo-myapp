@@ -18,7 +18,7 @@ export async function removeCategory(
   inFlight.add(id);
   opts.before?.(id);
   try {
-    await deleteCategory(id, opts.userId ?? 1);
+    await deleteCategory(id, opts.userId ?? undefined);
     return true;
   } catch (e) {
     throw e;
