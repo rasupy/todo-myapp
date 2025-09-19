@@ -7,6 +7,26 @@ body {
   display: flex;
   flex-direction: column;
   background: #f5f7fa;
+  overflow: hidden;
+}
+
+/* Google Icons*/
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 24px; /* fallback size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+/* クリック可能なタイトル */
+#appTitle {
+  cursor: pointer;
 }
 
 #app {
@@ -22,6 +42,14 @@ body {
 #app > .board {
   flex: 1 1 auto;
   min-height: 0;
+}
+
+#app > footer#appFooter {
+  flex: 0 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #777;
 }
 
 input {
@@ -47,6 +75,15 @@ pre {
 header {
   max-width: 1280px;
   margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-actions {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 8px;
 }
 
 .board {
@@ -55,10 +92,23 @@ header {
   align-items: stretch;
   max-width: 1280px;
   margin: 0 auto;
-  overflow-x: auto;
+  overflow: hidden;
   padding-bottom: 4px;
   flex: 1 1 auto;
   min-height: 0;
+}
+
+/* ページ残り高いっぱいにボードを広げる */
+#mainBoard.board {
+  height: calc(100vh - 80px - 40px);
+}
+
+.board.three-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr;
+  gap: 16px;
+  align-items: stretch;
 }
 
 .board > .col {
@@ -79,12 +129,22 @@ header {
   border-radius: 8px;
   padding: 12px 12px 16px;
   min-height: 0;
+  height: 100%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
   position: relative;
   transition: box-shadow 0.18s ease;
 }
 .col:hover {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* Auth board center */
+.auth-board {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
 }
 
 .col-title {
@@ -107,7 +167,7 @@ header {
 
 .list-panel {
   flex: 1 1 auto;
-  overflow-y: auto;
+  overflow: hidden;
   min-height: 0;
 }
 
@@ -302,6 +362,38 @@ header {
   outline-offset: 1px;
 }
 
+/* 枠・背景なしのアイコンボタン */
+.icon-ghost {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  color: inherit;
+}
+
+.icon-ghost .material-symbols-outlined {
+  font-size: 24px;
+}
+
+.icon-ghost:hover {
+  background: transparent;
+  color: #2563eb;
+}
+
+.icon-ghost:active {
+  background: transparent;
+  color: #1d4ed8;
+}
+
+.icon-ghost:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
 .txt-btn {
   background: transparent;
   border: none;
@@ -323,6 +415,72 @@ header {
   outline-offset: 2px;
 }
 
+/* Auth forms */
+.form-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.form-actions.between {
+  justify-content: space-between;
+}
+
+.panel.panel-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 共通フォーム入力スタイル（メインページ準拠） */
+.form-control {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  font-size: 15px;
+  line-height: 1.4;
+  border: 1px solid #d0d5da;
+  border-radius: 6px;
+  background: #fff;
+  color: #111111;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.form-control::-moz-placeholder {
+  color: #8a8f96;
+}
+.form-control::placeholder {
+  color: #8a8f96;
+}
+.form-control:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+  background: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .form-control {
+    background: #2a2c30;
+    border-color: #50555c;
+    color: #e4e6eb;
+  }
+  .form-control::-moz-placeholder {
+    color: #9aa0a6;
+  }
+  .form-control::placeholder {
+    color: #9aa0a6;
+  }
+  .form-control:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+    background: #2f3236;
+  }
+}
 .cat-item.editing .row-action-edit,
 .cat-item.editing .row-action-del {
   display: none;

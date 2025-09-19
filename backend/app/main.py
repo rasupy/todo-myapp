@@ -8,15 +8,19 @@ import time
 
 app = Flask(__name__)
 app.config.from_object(Config)
-# APIエンドポイントをフロントエンドの呼び出しに合わせて
-# /api/<endpoint>をexposeするためにURLプレフィックスを追加
+# フロントエンドの呼び出しに合わせてURLプレフィックスを設定
+# URLプレフィックス
+# Flaskアプリケーション内のすべてのルートに共通して付加されるパス。
+# /api に設定されている場合:
+# /api/users や /api/auth/login などのエンドポイントが作成される。
 app.register_blueprint(api_bp, url_prefix="/api")
 
 """
-仮ユーザー情報
+仮ユーザー情報（開発用）
 ユーザー名: testuser
 メール: testuser@example.com
 パスワード: password123
+本番では /api/auth/register を使用する。
 """
 
 USERNAME = "testuser"
@@ -24,7 +28,7 @@ EMAIL = "testuser@example.com"
 PASSWORD = "password123"
 
 
-# ユーザー取得・新規作成（リトライ機能統合）
+# ユーザー取得・新規作成
 def get_or_create_user(retries=10, delay=3):
     for i in range(retries):
         session = SessionLocal()
@@ -62,5 +66,6 @@ def main():
 
 if __name__ == "__main__":
     create_tables(retries=10, delay=3)
-    get_or_create_user()
+    # 本番運用では仮ユーザー作成をコメントアウト
+    # get_or_create_user()
     app.run(host="0.0.0.0", port=5000)
