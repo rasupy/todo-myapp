@@ -1,60 +1,42 @@
-# Frontend (TypeScript)
+# Frontend (TypeScript) — 簡潔版
 
 ## 概要
 
-- フレームワーク非依存の TypeScript + HTML Templates 構成。
-- API クライアント/表示/ドラッグ並べ替え/モーダル/テンプレート読込をモジュールごとに分離。
+フレームワークレスな TypeScript + HTML Templates。表示/テンプレート/ドラッグ/データ取得をモジュール分割。
 
-## フォルダ構成（抜粋）
+## 主要 UI とフロー
 
-```
-frontend/
-  public/
-    index.html
-    templates/
-      category-item.html
-      task-item.html
-      archive-item.html
-      modal-*.html
-    scss/
-      styles.scss, base/, layout/, components/
-  src/
-    main.ts              # 画面全体のオーケストレーション
-    api.ts               # API 呼び出し（fetch* / update* / reorder*）
-    categoryView.ts      # カテゴリ一覧の描画
-    taskView.ts          # タスク一覧 + アーカイブボタン
-    archiveView.ts       # アーカイブ一覧 + 復元/削除
-    categorySortable.ts  # カテゴリのDnD
-    taskSortable.ts      # タスク/アーカイブのDnD
-    templates.ts         # テンプレートローダ
-```
-
-## 主要 UI と動作フロー
-
-- 画面構成: Category / Task / Archive の 3 カラム
-- カテゴリ選択 → Task と Archive を同時取得して表示
-- 行右端のアイコン
-  - Task: `[ chevron_right, edit, delete ]`
-  - Archive: `[ chevron_left, delete ]`
+- 3 カラム: Category / Task / Archive
+- 初回はログイン/登録（成功で `localStorage.user_id` 保存）
+- カテゴリ選択で Task と Archive を同時取得
+- 行右端の操作: Task `[chevron_right, edit, delete]` / Archive `[chevron_left, delete]`
 - DnD で順序変更 → `PATCH` API で保存
 
-## 採用技術とメリット
+## 技術と採用理由
 
-- TypeScript: 型補完/安全性で保守性向上
-- フレームワークレス: 軽量・理解容易、学習/検証用途に最適
-- Caching なしのテンプレート直読み: 変更を即時反映、開発サイクルが速い
+- TypeScript + 素の DOM: 軽量・理解容易、型で保守性
+- テンプレート直読み: 変更が即反映で開発が速い
+- Nginx 配信: `public/` と `dist/` をまとめて提供
 
-## ローカルビルド（任意）
+## 起動（Docker が最短）
+
+```bash
+cd todo-myapp
+docker compose up --build -d
+# http://localhost:3000
+```
+
+## ローカル開発（Node）
 
 ```bash
 cd todo-myapp/frontend
 npm install
-npm run build
-# public/ と dist/ を nginx で配信（Docker イメージ内）
+npm run dev               # tsc --watch で dist/ を生成
+npx http-server public -p 3000 &  # 静的配信
+# dist/ も配信する場合: npx http-server . -p 3000
 ```
 
-## 今後の拡張
+## トラブル（最小）
 
-- トースト通知/バリデーションの強化
-- テスト（ユニット/E2E）導入
-- Lint/Formatter の導入（ESLint/Prettier）
+- `main.js` が見つからない → `npm run build|dev` 実行し、`public/` と `dist/` を配信
+- API 404/接続失敗 → Compose の `backend` が稼働し、フロント Nginx が `/api/` を `backend:5000` にプロキシしているか確認
