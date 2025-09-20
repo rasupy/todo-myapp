@@ -26,6 +26,13 @@ body {
 }
 
 /* クリック可能なタイトル */
+#titleBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  color: $color-text-dark;
+}
 #appTitle {
   cursor: pointer;
 }

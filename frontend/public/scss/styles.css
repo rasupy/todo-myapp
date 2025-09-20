@@ -25,6 +25,14 @@ body {
 }
 
 /* クリック可能なタイトル */
+#titleBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  color: #e4e6eb;
+}
+
 #appTitle {
   cursor: pointer;
 }

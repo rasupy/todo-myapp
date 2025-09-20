@@ -17,30 +17,32 @@
   <body>
     <div id="app">
       <header>
-        <div class="header-actions">
-          <h1 id="appTitle">Todo Bord</h1>
-          <button
-            id="btnLogout"
-            class="icon-ghost"
-            title="Logout"
-            aria-label="Logout"
-            style="display: none"
-          >
-            <span class="material-symbols-outlined" aria-hidden="true"
-              >logout</span
+        <div id="titleBar">
+          <h1 id="appTitle">Todo Board</h1>
+          <div class="header-actions">
+            <button
+              id="btnLogout"
+              class="icon-ghost"
+              title="Logout"
+              aria-label="Logout"
+              style="display: none"
             >
-          </button>
-          <div id="authBoard" class="auth-board" style="display: none">
-            <div
-              class="board"
-              id="authBoards"
-              style="max-width: 560px; width: 100%"
-            ></div>
-            <p
-              id="authError"
-              style="color: #b00; display: none; max-width: 560px"
-            ></p>
+              <span class="material-symbols-outlined" aria-hidden="true"
+                >logout</span
+              >
+            </button>
           </div>
+        </div>
+        <div id="authBoard" class="auth-board" style="display: none">
+          <div
+            class="board"
+            id="authBoards"
+            style="max-width: 560px; width: 100%"
+          ></div>
+          <p
+            id="authError"
+            style="color: #b00; display: none; max-width: 560px"
+          ></p>
         </div>
       </header>
       <div id="mainBoard" class="board three-cols">
