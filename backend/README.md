@@ -1,8 +1,9 @@
-# Backend (Flask API) — 簡潔版
+# バックエンド開発
 
 ## 概要
 
-Flask + SQLAlchemy の REST API。カテゴリ/タスク/アーカイブを提供。機能別 Blueprint 分割、`status=archived` で状態を簡潔管理。
+Flask + SQLAlchemy の REST API。
+カテゴリ、タスク、アーカイブのデータを提供。
 
 ## 主なエンドポイント
 
@@ -12,15 +13,14 @@ Flask + SQLAlchemy の REST API。カテゴリ/タスク/アーカイブを提�
 
 ## 技術と採用理由
 
-- Flask + SQLAlchemy: 小規模 API を素早く構築、ORM で保守性
-- PostgreSQL: 整合性(ユニーク制約)と性能(インデックス)
+- Flask + SQLAlchemy: 小規模 API を素早く構築、ORM で保守性 UP
+- PostgreSQL: メジャーで導入しやすい。
 - Blueprint 分割: 変更影響を局所化
 
 ## 学び（要点）
 
-- 並び順の一括更新（SQL `CASE WHEN`）と API の PATCH 設計
-- `status` による通常/アーカイブの単純な状態遷移
-- API 構成を役割ごとに分割して見通しを改善
+- データベース操作
+- JSON 形式のデータに変換してフロント側に渡す。リアルタイム処理（ページのリロードなし）でデータベース操作とフロントとバック間データの送受信が可能。
 
 ## 起動（Docker）
 
@@ -29,8 +29,3 @@ cd todo-myapp
 docker compose up --build -d
 # API: http://localhost:5000/api
 ```
-
-## トラブルシュート（最小）
-
-- テーブル未作成: 初回起動のリトライ完了まで待機 or `docker compose restart backend`
-- 接続失敗: `DATABASE_URL` を確認（Compose では `db` サービス）
