@@ -1,0 +1,25 @@
+<!-- メニューモーダルのテンプレート -->
+<template id="tmpl-modal-menu">
+  <dialog id="menuDialog">
+    <form method="dialog" id="menuForm">
+      <h3>Menu</h3>
+      <div class="menu-list-vertical">
+        <button type="button" id="btnToggleTheme" class="menu-item">
+          <span class="material-symbols-outlined" aria-hidden="true"
+            >dark_mode</span
+          >
+          <span id="themeToggleLabel">ダークモード</span>
+        </button>
+        <button type="button" id="btnLogoutFromMenu" class="menu-item">
+          <span class="material-symbols-outlined" aria-hidden="true"
+            >logout</span
+          >
+          <span>ログアウト</span>
+        </button>
+      </div>
+      <div class="dlg-actions">
+        <button value="cancel" type="button" id="menuClose">Close</button>
+      </div>
+    </form>
+  </dialog>
+</template>

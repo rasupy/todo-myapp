@@ -5,9 +5,14 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "npm run clean && tsc --project tsconfig.json --outDir dist",
-    "dev": "tsc --watch --project tsconfig.json --outDir dist"
+    "dev": "tsc --watch --project tsconfig.json --outDir dist",
+    "scss:build": "sass public/scss/styles.scss public/scss/styles.css --no-source-map",
+    "scss:watch": "sass --watch public/scss/styles.scss public/scss/styles.css --no-source-map"
   },
   "devDependencies": {
-    "typescript": "^5.8.3"
+    "sass": "^1.77.8"
+  },
+  "dependencies": {
+    "typescript": "^5.6.3"
   }
 }

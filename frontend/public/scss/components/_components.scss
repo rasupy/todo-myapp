@@ -289,7 +289,8 @@
 /* モーダルのスタイル */
 dialog#catAddDialog,
 dialog#taskAddDialog,
-dialog#taskEditDialog {
+dialog#taskEditDialog,
+dialog#menuDialog {
   border: 1px solid #d0d5da;
   border-radius: 12px;
   padding: 18px 20px 20px;
@@ -360,7 +361,8 @@ dialog#taskEditDialog {
 }
 dialog#catAddDialog::backdrop,
 dialog#taskAddDialog::backdrop,
-dialog#taskEditDialog::backdrop {
+dialog#taskEditDialog::backdrop,
+dialog#menuDialog::backdrop {
   background: rgba(0, 0, 0, 0.3);
 }
 

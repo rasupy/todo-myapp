@@ -274,9 +274,7 @@ header {
 .cat-item {
   padding: 6px 0;
   border-bottom: 1px solid #eee;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
   touch-action: none;
   cursor: grab;
   display: flex;
@@ -458,9 +456,6 @@ header {
   color: #111111;
   transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
 }
-.form-control::-moz-placeholder {
-  color: #8a8f96;
-}
 .form-control::placeholder {
   color: #8a8f96;
 }
@@ -476,9 +471,6 @@ header {
     background: #2a2c30;
     border-color: #50555c;
     color: #e4e6eb;
-  }
-  .form-control::-moz-placeholder {
-    color: #9aa0a6;
   }
   .form-control::placeholder {
     color: #9aa0a6;
@@ -506,9 +498,6 @@ header {
   background: #fff;
   transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
 }
-.cat-edit-input::-moz-placeholder {
-  color: #8a8f96;
-}
 .cat-edit-input::placeholder {
   color: #8a8f96;
 }
@@ -527,7 +516,8 @@ header {
 /* モーダルのスタイル */
 dialog#catAddDialog,
 dialog#taskAddDialog,
-dialog#taskEditDialog {
+dialog#taskEditDialog,
+dialog#menuDialog {
   border: 1px solid #d0d5da;
   border-radius: 12px;
   padding: 18px 20px 20px;
@@ -537,7 +527,8 @@ dialog#taskEditDialog {
 }
 dialog#catAddDialog form,
 dialog#taskAddDialog form,
-dialog#taskEditDialog form {
+dialog#taskEditDialog form,
+dialog#menuDialog form {
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -547,7 +538,9 @@ dialog#catAddDialog textarea,
 dialog#taskAddDialog input,
 dialog#taskAddDialog textarea,
 dialog#taskEditDialog input,
-dialog#taskEditDialog textarea {
+dialog#taskEditDialog textarea,
+dialog#menuDialog input,
+dialog#menuDialog textarea {
   width: 100%;
   box-sizing: border-box;
 }
@@ -565,7 +558,12 @@ dialog#taskEditDialog #catAddInput,
 dialog#taskEditDialog #taskAddTitle,
 dialog#taskEditDialog #taskEditTitle,
 dialog#taskEditDialog #taskAddContent,
-dialog#taskEditDialog #taskEditContent {
+dialog#taskEditDialog #taskEditContent,
+dialog#menuDialog #catAddInput,
+dialog#menuDialog #taskAddTitle,
+dialog#menuDialog #taskEditTitle,
+dialog#menuDialog #taskAddContent,
+dialog#menuDialog #taskEditContent {
   padding: 10px 12px;
   font-size: 15px;
   line-height: 1.4;
@@ -573,9 +571,6 @@ dialog#taskEditDialog #taskEditContent {
   border-radius: 6px;
   background: #fff;
   transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
-}
-dialog#catAddDialog #catAddInput::-moz-placeholder, dialog#catAddDialog #taskAddTitle::-moz-placeholder, dialog#catAddDialog #taskEditTitle::-moz-placeholder, dialog#catAddDialog #taskAddContent::-moz-placeholder, dialog#catAddDialog #taskEditContent::-moz-placeholder, dialog#taskAddDialog #catAddInput::-moz-placeholder, dialog#taskAddDialog #taskAddTitle::-moz-placeholder, dialog#taskAddDialog #taskEditTitle::-moz-placeholder, dialog#taskAddDialog #taskAddContent::-moz-placeholder, dialog#taskAddDialog #taskEditContent::-moz-placeholder, dialog#taskEditDialog #catAddInput::-moz-placeholder, dialog#taskEditDialog #taskAddTitle::-moz-placeholder, dialog#taskEditDialog #taskEditTitle::-moz-placeholder, dialog#taskEditDialog #taskAddContent::-moz-placeholder, dialog#taskEditDialog #taskEditContent::-moz-placeholder {
-  color: #8a8f96;
 }
 dialog#catAddDialog #catAddInput::placeholder,
 dialog#catAddDialog #taskAddTitle::placeholder,
@@ -591,7 +586,12 @@ dialog#taskEditDialog #catAddInput::placeholder,
 dialog#taskEditDialog #taskAddTitle::placeholder,
 dialog#taskEditDialog #taskEditTitle::placeholder,
 dialog#taskEditDialog #taskAddContent::placeholder,
-dialog#taskEditDialog #taskEditContent::placeholder {
+dialog#taskEditDialog #taskEditContent::placeholder,
+dialog#menuDialog #catAddInput::placeholder,
+dialog#menuDialog #taskAddTitle::placeholder,
+dialog#menuDialog #taskEditTitle::placeholder,
+dialog#menuDialog #taskAddContent::placeholder,
+dialog#menuDialog #taskEditContent::placeholder {
   color: #8a8f96;
 }
 dialog#catAddDialog #catAddInput:focus,
@@ -608,7 +608,12 @@ dialog#taskEditDialog #catAddInput:focus,
 dialog#taskEditDialog #taskAddTitle:focus,
 dialog#taskEditDialog #taskEditTitle:focus,
 dialog#taskEditDialog #taskAddContent:focus,
-dialog#taskEditDialog #taskEditContent:focus {
+dialog#taskEditDialog #taskEditContent:focus,
+dialog#menuDialog #catAddInput:focus,
+dialog#menuDialog #taskAddTitle:focus,
+dialog#menuDialog #taskEditTitle:focus,
+dialog#menuDialog #taskAddContent:focus,
+dialog#menuDialog #taskEditContent:focus {
   outline: none;
   border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
@@ -616,14 +621,16 @@ dialog#taskEditDialog #taskEditContent:focus {
 }
 dialog#catAddDialog .dlg-actions,
 dialog#taskAddDialog .dlg-actions,
-dialog#taskEditDialog .dlg-actions {
+dialog#taskEditDialog .dlg-actions,
+dialog#menuDialog .dlg-actions {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
 }
 dialog#catAddDialog .dlg-actions button,
 dialog#taskAddDialog .dlg-actions button,
-dialog#taskEditDialog .dlg-actions button {
+dialog#taskEditDialog .dlg-actions button,
+dialog#menuDialog .dlg-actions button {
   cursor: pointer;
   font-weight: 600;
   background: transparent;
@@ -636,25 +643,29 @@ dialog#taskEditDialog .dlg-actions button {
 }
 dialog#catAddDialog .dlg-actions button:hover,
 dialog#taskAddDialog .dlg-actions button:hover,
-dialog#taskEditDialog .dlg-actions button:hover {
+dialog#taskEditDialog .dlg-actions button:hover,
+dialog#menuDialog .dlg-actions button:hover {
   background: rgba(37, 99, 235, 0.12);
   color: #2563eb;
 }
 dialog#catAddDialog .dlg-actions button:active,
 dialog#taskAddDialog .dlg-actions button:active,
-dialog#taskEditDialog .dlg-actions button:active {
+dialog#taskEditDialog .dlg-actions button:active,
+dialog#menuDialog .dlg-actions button:active {
   background: rgba(37, 99, 235, 0.24);
 }
 dialog#catAddDialog .dlg-actions button:focus-visible,
 dialog#taskAddDialog .dlg-actions button:focus-visible,
-dialog#taskEditDialog .dlg-actions button:focus-visible {
+dialog#taskEditDialog .dlg-actions button:focus-visible,
+dialog#menuDialog .dlg-actions button:focus-visible {
   outline: 2px solid #2563eb;
   outline-offset: 2px;
 }
 
 dialog#catAddDialog::backdrop,
 dialog#taskAddDialog::backdrop,
-dialog#taskEditDialog::backdrop {
+dialog#taskEditDialog::backdrop,
+dialog#menuDialog::backdrop {
   background: rgba(0, 0, 0, 0.3);
 }
 
@@ -684,9 +695,6 @@ dialog#taskEditDialog::backdrop {
     background: #2a2c30;
     border-color: #50555c;
     color: #e4e6eb;
-  }
-  .cat-edit-input::-moz-placeholder {
-    color: #9aa0a6;
   }
   .cat-edit-input::placeholder {
     color: #9aa0a6;
@@ -729,9 +737,6 @@ dialog#taskEditDialog::backdrop {
     border-color: #50555c;
     color: #e4e6eb;
   }
-  dialog#catAddDialog #catAddInput::-moz-placeholder, dialog#taskAddDialog #taskAddTitle::-moz-placeholder, dialog#taskAddDialog #taskAddContent::-moz-placeholder, dialog#taskEditDialog #taskEditTitle::-moz-placeholder, dialog#taskEditDialog #taskEditContent::-moz-placeholder {
-    color: #9aa0a6;
-  }
   dialog#catAddDialog #catAddInput::placeholder,
   dialog#taskAddDialog #taskAddTitle::placeholder,
   dialog#taskAddDialog #taskAddContent::placeholder,
@@ -770,9 +775,7 @@ dialog#taskEditDialog::backdrop {
 .task-item {
   padding: 6px 0;
   border-bottom: 1px solid #eee;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
   touch-action: none;
   cursor: grab;
   display: flex;
@@ -813,4 +816,140 @@ dialog#taskEditDialog::backdrop {
 /* Utilities */
 .placeholder {
   transition: background-color 120ms ease;
-}/*# sourceMappingURL=styles.css.map */
+}
+
+/*
+  テーマ切替: [data-theme="light"|"dark"]
+  既定はライト。ブラウザの prefers-color-scheme もあるが、明示テーマが優先。
+*/
+:root,
+html[data-theme=light] {
+  color-scheme: light;
+}
+
+html[data-theme=dark] {
+  color-scheme: dark;
+}
+
+/* Body と基本色 */
+html[data-theme=light] body {
+  background: #f5f7fa;
+  color: #111111;
+}
+
+html[data-theme=dark] body {
+  background: #1e1f22;
+  color: #e4e6eb;
+}
+
+/* カラム、パネル、プレースホルダなど layout 対応 */
+html[data-theme=light] .col {
+  background: #ffffff;
+  border-color: #e5e5e5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+html[data-theme=dark] .col {
+  background: #2a2c30;
+  border-color: #3a3d41;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+html[data-theme=light] .panel {
+  background: #fafbfc;
+  border-color: #e6e9ec;
+}
+
+html[data-theme=dark] .panel {
+  background: #212326;
+  border-color: #323438;
+}
+
+html[data-theme=light] .placeholder-panel {
+  color: #888;
+}
+
+html[data-theme=dark] .placeholder-panel {
+  color: #aaa;
+}
+
+/* フォーム要素や入力 */
+html[data-theme=light] .form-control,
+html[data-theme=light] #catAddInput,
+html[data-theme=light] #taskAddTitle,
+html[data-theme=light] #taskEditTitle,
+html[data-theme=light] #taskAddContent,
+html[data-theme=light] #taskEditContent {
+  background: #fff;
+  border-color: #d0d5da;
+  color: #111111;
+}
+
+html[data-theme=dark] .form-control,
+html[data-theme=dark] #catAddInput,
+html[data-theme=dark] #taskAddTitle,
+html[data-theme=dark] #taskEditTitle,
+html[data-theme=dark] #taskAddContent,
+html[data-theme=dark] #taskEditContent {
+  background: #2a2c30;
+  border-color: #50555c;
+  color: #e4e6eb;
+}
+
+/* モーダル (dialog) 背景 */
+html[data-theme=light] dialog#catAddDialog,
+html[data-theme=light] dialog#taskAddDialog,
+html[data-theme=light] dialog#taskEditDialog,
+html[data-theme=light] dialog#menuDialog {
+  background: #fff;
+  color: #111111;
+  border-color: #d0d5da;
+}
+
+html[data-theme=dark] dialog#catAddDialog,
+html[data-theme=dark] dialog#taskAddDialog,
+html[data-theme=dark] dialog#taskEditDialog,
+html[data-theme=dark] dialog#menuDialog {
+  background: #2a2c30;
+  color: #e4e6eb;
+  border-color: #3a3d41;
+}
+
+/* メニューの縦リスト */
+.menu-list-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 8px 0 12px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+}
+
+html[data-theme=light] .menu-item:hover {
+  background: #f6f7f9;
+  border-color: #e6e9ec;
+}
+
+html[data-theme=dark] .menu-item:hover {
+  background: #2b2e31;
+  border-color: #41454a;
+}
+
+/* アイコンボタンのアクセント */
+.icon-ghost:hover {
+  color: #2563eb;
+}
+
+.icon-ghost:active {
+  color: #1d4ed8;
+}
