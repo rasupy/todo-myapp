@@ -6,6 +6,7 @@ const TEMPLATE_FILES = [
   "/templates/modal-category-add.html",
   "/templates/modal-task-add.html",
   "/templates/modal-task-edit.html",
+  "/templates/modal-menu.html",
   "/templates/login.html",
   "/templates/register.html",
 ] as const;
